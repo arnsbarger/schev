@@ -10,26 +10,37 @@ final_product <- data.frame(college_fips = character(),
                             stringsAsFactors = FALSE)
 
 # i in 79 college
-i <- 1
-college <- schev[i]
-
-# j of 133 counties
-j <- 2
-for (j in 1:133){
-    county <- college[[j]]
+for (i in 1:79){
+    college <- schev[i]
     
-    final_product[(9*i-8):(9*i),"college_fips"] <- names(county[j])
+    # j of 133 counties
+    for (j in 1:133){
+        county <- college[[1]]
+        
+        final_product[(9*j-8):(9*j),"college_fips"] <- names(county[j])
+        
+        college_fips <- as.data.frame(county[j])
+        final_product[(9*j-8):(9*j),"fall_term"] <- college_fips[1:9,2]
+        final_product[(9*j-8):(9*j),"num_applications"] <- college_fips[1:9,3]
+        final_product[(9*j-8):(9*j),"num_admitted"] <- college_fips[1:9,6]
+        final_product[(9*j-8):(9*j),"num_enrolled"] <- college_fips[1:9,9]
+        final_product[(9*j-8):(9*j),"admit_rate"] <- college_fips[1:9,12]
+        final_product[(9*j-8):(9*j),"yield_rate"] <- college_fips[1:9,15]
+        
+        print(j)
+    }
     
-    # number of applications - store in final_product DataTable_apps231420.Count
-    college_fips <- as.data.frame(county[j])
-    final_product[(9*i-8):(9*i),"fall_term"] <- college_fips[1:9,2]
-    #final_product[(9*i-8):(9*i),"num_applications"] <- college_fips[1:9,grep("apps", colnames(college_fips))] # apps Count
-    final_product[(9*i-8):(9*i),"num_applications"] <- college_fips[1:9,3]
-    final_product[(9*i-8):(9*i),"num_admitted"] <- college_fips[1:9,6]
-    final_product[(9*i-8):(9*i),"num_enrolled"] <- college_fips[1:9,9]
-    final_product[(9*i-8):(9*i),"admit_rate"] <- college_fips[1:9,12]
-    final_product[(9*i-8):(9*i),"yield_rate"] <- college_fips[1:9,15]
-    
-    print(j)
+    print(i)
 }
+
+
+
+
+# j <- 1
+# college <- schev[i]
+# county <- college[[j]]
+# 
+names(county[j])
+names(county[5])
+names(county[100])
 
