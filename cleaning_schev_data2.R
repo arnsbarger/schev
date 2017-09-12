@@ -47,6 +47,10 @@ for (i in 1:79){
     print(i)
 }
 
+# separeate first column of form "College_###" into two separate columns:
+# (1) college name, (2) 3-digit county fips code
+library(dplyr)
+final_product <- separate(data = final_product, col = "college_fips", into = c("college", "fips"), sep = "_", remove = T)
 
-
-
+# save data
+write.csv(final_product, "~/Documents/SDAL/SCHEV/data/schev_website.csv", row.names = FALSE)
