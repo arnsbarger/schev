@@ -54,5 +54,3 @@ final_product <- separate(data = final_product, col = "college_fips", into = c("
 
 # save data
 write.csv(final_product, "~/Documents/SDAL/SCHEV/data/schev_website.csv", row.names = FALSE, quote = 2)
-
-test <- read.csv("~/Documents/SDAL/SCHEV/data/schev_website.csv")
