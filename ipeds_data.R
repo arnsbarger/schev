@@ -3,6 +3,7 @@
 # Number of 4-year colleges/universities within 60 minutes
 # Number of community colleges within 60 minutes
 
+library(ggplot2)
 library(gdata)
 library(dplyr)
 library(raster)
@@ -39,29 +40,48 @@ hd_icay2015$TUITION1 <- as.numeric(as.character(hd_icay2015$TUITION1))
 
 ggplot() +
     geom_polygon(data = virginia, aes(x=long,y=lat,group=group), fill = NA, color = 'black') +
-    geom_point(data = hd_icay2015, aes(x = LONGITUD, y = LATITUDE, size = TUITION1, color = as.factor(CONTROL)))
+    geom_point(data = hd_icay2015, aes(x = LONGITUD, y = LATITUDE, size = TUITION1, color = as.factor(CONTROL))) +
+    coord_map()
 
 # get lat/longs of each high school ####
-highschools <- read.csv("~/Google Drive/SCHEV (Peter Blake - Wendy Kang)/Code/Bianica/school_crosswalk.csv")
-highschools$google_query <- paste(highschools$sch_names, highschools$div_name)
+highschools <- read.csv("~/Google Drive/SCHEV (Peter Blake - Wendy Kang)/Code/Bianica/school_crosswalk.csv") # wrote the csv below - now this file has the coordinates already
+ highschools$google_query <- paste(highschools$sch_names, highschools$div_name)
 
-library(ggmap)
+ library(ggmap)
 
-for(i in 1:nrow(highschools)){    
-    location <- highschools$google[i]
-    coords <- ggmap::geocode(location, output = "latlon", source = "google")
-    highschools$long[i] <- coords$lon
-    highschools$lat[i] <- coords$lat
-    
-}
+ for(i in 1:nrow(highschools)){
+     location <- highschools$google[i]
+     coords <- ggmap::geocode(location, output = "latlon", source = "google")
+     highschools$long[i] <- coords$lon
+     highschools$lat[i] <- coords$lat
+
+ }
+
+# write.csv(highschools, "~/Google Drive/SCHEV (Peter Blake - Wendy Kang)/Code/Bianica/school_crosswalk.csv")
 
 # calculate distance from each high school to each university ####
 
-for(i in 1:nrow(highschools)){
+college_columns <- data.frame(UNITID = hd_icay2015$UNITID,
+                        INSTNM = hd_icay2015$INSTNM,
+                        college_long = hd_icay2015$LONGITUD,
+                        college_lat = hd_icay2015$LATITUDE)
+ 
+ hs_columns <- paste("Distance to", highschools$google_query)
+ distances <- cbind(college_columns, matrix(rep("", 4 + length(hs_columns)), nrow=1))
+ names(distances) <- c(names(college_columns), hs_columns)
+
+for(i in 1:nrow(hd_icay2015)){
     
-    stationid <- fire_nooutliers$station[i]
+    college_coords <- c(hd_icay2015$LONGITUD[i], hd_icay2015$LATITUDE[i])
     
-    stationcoord <- as.matrix(stationgis[which(stationgis$Name == stationid), c("Longitude", "Latitude")], ncol = 2)
+    for(j in 1:nrow(highschools)){
+        
+        hs_coords <- c(highschools$long[j], highschools$lat[j])
+        
+        hd_icay2015
+    }
+    
+    #stationcoord <- as.matrix(stationgis[which(stationgis$Name == stationid), c("Longitude", "Latitude")], ncol = 2)
     
     firecoord <- as.matrix(fire_nooutliers[i, c("longitude","latitude")], ncol = 2)
     
