@@ -1,4 +1,4 @@
-# Aggregating IPEDS data for SCHEV Fall 2017 project:
+# Aggregating IPEDS data for SCHEV Fall 2017 project to create the following variables:
 # Number of vocational schools within 60 minutes
 # Number of 4-year colleges/universities within 60 minutes
 # Number of community colleges within 60 minutes
@@ -12,7 +12,7 @@ library(maptools)
 setwd("~/Google Drive/SCHEV (Peter Blake - Wendy Kang)/Data/IPEDS/Institutional Characteristics/")
 
 # load hd2015 ipeds table - only relevant variables (see hd2015 dictionary) ####
-hd2015 <- read.csv("hd2015.csv")[,c(c("UNITID","INSTNM","ADDR","CITY","STABBR","ZIP","FIPS","OBEREG","OPEID","OPEFLAG","ICLEVEL","CONTROL",
+hd2015 <- read.csv("hd2015.csv")[,c(c("UNITID","INSTNM","ADDR","CITY","STABBR","ZIP","FIPS","OBEREG","OPEID","OPEFLAG","ICLEVEL","CONTROL","C15IPUG",
                                       "SECTOR","HLOFFER","HBCU","TRIBAL","LOCALE","C15SZSET","CBSA","CSA","COUNTYCD","COUNTYNM","CNGDSTCD","LONGITUD","LATITUDE"))]
 # keep only VA schools
 hd2015 <- hd2015 %>% filter(STABBR == "VA")
@@ -45,48 +45,68 @@ ggplot() +
 
 # get lat/longs of each high school ####
 highschools <- read.csv("~/Google Drive/SCHEV (Peter Blake - Wendy Kang)/Code/Bianica/school_crosswalk.csv") # wrote the csv below - now this file has the coordinates already
- highschools$google_query <- paste(highschools$sch_names, highschools$div_name)
+#highschools$google_query <- paste(highschools$sch_names, highschools$div_name)
 
- library(ggmap)
-
- for(i in 1:nrow(highschools)){
-     location <- highschools$google[i]
-     coords <- ggmap::geocode(location, output = "latlon", source = "google")
-     highschools$long[i] <- coords$lon
-     highschools$lat[i] <- coords$lat
-
- }
-
+# library(ggmap)
+# 
+# for(i in 1:nrow(highschools)){
+#     location <- highschools$google[i]
+#     coords <- ggmap::geocode(location, output = "latlon", source = "google")
+#     highschools$long[i] <- coords$lon
+#     highschools$lat[i] <- coords$lat
+# 
+# }
+# 
 # write.csv(highschools, "~/Google Drive/SCHEV (Peter Blake - Wendy Kang)/Code/Bianica/school_crosswalk.csv")
 
-# calculate distance from each high school to each university ####
+# assign surrounding counties ####
+bland_county <- c("Tazewell County", "Smyth County", "Wythe County", "Pulaski County", "Giles County", "Bland County")
+buchanan_county <- c("Dickenson County", "Russell County", "Tazewell County", "Buchanan County")
+roanoke_city <- c("Roanoke County", "Salem County", "Roanoke City")
+roanoke_county <- c("Roanoke City","Montgomery County", "Floyd County", "Franklin County", "Bedford County", "Botetourt County", "Craig County", "Roanoke County")
+richmond_city <- c("Chesterfield County", "Henrico County", "Richmond City")
+sussex_county <- c("Prince George County", "Dinwiddie County", "Greensville County", "Southampton County", "Isle of Wight County", "Surry County")
+powhatan <- c("Goochland County", "Cumberland County", "Amelia County", "Chesterfield County")
 
-college_columns <- data.frame(UNITID = hd_icay2015$UNITID,
-                        INSTNM = hd_icay2015$INSTNM,
-                        college_long = hd_icay2015$LONGITUD,
-                        college_lat = hd_icay2015$LATITUDE)
- 
- hs_columns <- paste("Distance to", highschools$google_query)
- distances <- cbind(college_columns, matrix(rep("", 4 + length(hs_columns)), nrow=1))
- names(distances) <- c(names(college_columns), hs_columns)
 
-for(i in 1:nrow(hd_icay2015)){
-    
-    college_coords <- c(hd_icay2015$LONGITUD[i], hd_icay2015$LATITUDE[i])
-    
-    for(j in 1:nrow(highschools)){
-        
-        hs_coords <- c(highschools$long[j], highschools$lat[j])
-        
-        hd_icay2015
-    }
-    
-    #stationcoord <- as.matrix(stationgis[which(stationgis$Name == stationid), c("Longitude", "Latitude")], ncol = 2)
-    
-    firecoord <- as.matrix(fire_nooutliers[i, c("longitude","latitude")], ncol = 2)
-    
-    fire_nooutliers$distance_hav[i] <- distHaversine(stationcoord, firecoord)
-    
-    fire_nooutliers$distance_mi <- (fire_nooutliers$distance_hav)/(1609.344)
+counties <- list(bland_county, buchanan_county, roanoke_city, roanoke_county, richmond_city,sussex_county,powhatan)
+
+# calculate nearby colleges (number in county + number in surrounding counties)
+# all schools ####
+for(i in 1:7){
+    highschools$count_all_colleges[highschools$div_name==unique(highschools$div_name)[i]] <- sum(as.character(hd_icay2015$COUNTYNM) %in% counties[[i]])
 }
+# 4-year schools ####
+hd_icay2015$INSTNM[hd_icay2015$C15IPUG %in% 6:17]
+
+hd_ic2015_4year <- hd_icay2015 %>% filter(C15IPUG %in% 6:17)
+
+for(i in 1:7){
+    highschools$count_4year[highschools$div_name==unique(highschools$div_name)[i]] <- sum(as.character(hd_ic2015_4year$COUNTYNM) %in% counties[[i]])
+}
+# community colleges ####
+hd_icay2015$INSTNM[hd_icay2015$C15IPUG %in% 1:2]
+
+hd_ic2015_cc <- hd_icay2015 %>% filter(C15IPUG %in% 1:2)
+
+for(i in 1:7){
+    highschools$count_comm_college[highschools$div_name==unique(highschools$div_name)[i]] <- sum(as.character(hd_ic2015_cc$COUNTYNM) %in% counties[[i]])
+}
+# career schools ####
+hd_icay2015$INSTNM[hd_icay2015$C15IPUG %in% c(3:5,18:20)]
+
+hd_ic2015_career <- hd_icay2015 %>% filter(C15IPUG %in% c(3:5,18:20))
+
+for(i in 1:7){
+    highschools$count_career_schools[highschools$div_name==unique(highschools$div_name)[i]] <- sum(as.character(hd_ic2015_career$COUNTYNM) %in% counties[[i]])
+}
+# vocational/cte schools ####
+hd_icay2015$INSTNM[hd_icay2015$C15IPUG == -2]
+
+hd_ic2015_cte <- hd_icay2015 %>% filter(C15IPUG  == -2)
+
+for(i in 1:7){
+    highschools$count_cte_schools[highschools$div_name==unique(highschools$div_name)[i]] <- sum(as.character(hd_ic2015_cte$COUNTYNM) %in% counties[[i]])
+}
+
 
