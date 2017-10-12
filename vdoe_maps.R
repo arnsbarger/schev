@@ -7,12 +7,14 @@ library(lubridate)
 library(tidyr)
 library(reshape2)
 library(scales)
-library(OpenStreetMap)
+#library(OpenStreetMap)
 library(stplanr)
 library(rgeos)
 library(stringr)
 
 setwd("~/Google Drive/SCHEV (Peter Blake - Wendy Kang)")
+
+#source("~/Google Drive/SCHEV (Peter Blake - Wendy Kang)/Code/Bianica/SchoolBoundaries.R") # doesn't work :( ... copy/paste below
 
 # run Bianica's code to clean school attendance boundaries ####
 # import school crosswalk
@@ -71,23 +73,22 @@ vdoe <- read.csv("Code/Bianica/vdoe_psEnrollmentDataForMaps.csv")
 usa <- maptools::readShapePoly("~/Downloads/cb_2016_us_county_5m/cb_2016_us_county_5m.shp")
 virginia <- fortify(usa[usa@data$STATEFP==51,])
 
-# heatmaps ####
-
 # convert sch_boundaries block groups to a dataframe
 sch_boundaries@data$id = rownames(sch_boundaries@data)
 sch_boundaries.points = fortify(sch_boundaries, region="id")
 sch_boundaries.df = left_join(sch_boundaries.points, sch_boundaries@data, by="id")
-# merge with ACS data
+
 map_data <- left_join(vdoe, sch_boundaries.df, by = "sch_name_clean")
 
 names(map_data)
-map_data <- map_data[!map_data$sch_name_clean == "Franklin Military Academy",]
+which(is.na(map_data$long))
+map_data <- map_data[!map_data$sch_name_clean == "Franklin Military Academy",] # remove NA coordinate
 
 # convert 
 coords <- data.frame(x=c(map_data$long), y=c(map_data$lat))
 nad83_coords <- coords
 coordinates(nad83_coords) <- c('x', 'y')
-proj4string(nad83_coords)=CRS("+init=epsg:32047") #32047
+proj4string(nad83_coords)=CRS("+init=epsg:32047") #32047 ... http://spatialreference.org/ref/?search=virginia&srtext=Search
 spTransform(nad83_coords,CRS("+init=epsg:4326"))
 coords <- as.data.frame(spTransform(nad83_coords,CRS("+init=epsg:4326")))
 
