@@ -215,7 +215,7 @@ ggsave("Code/Maddie/output/RICHMONDmap_prop_disadv4year.png", device = "png", wi
 ggplot() + 
     #geom_polygon(data = virginia_t %>% filter(NAME == "Bland"), aes(x = long, y = lat, group = group), fill=NA,color='black') +
     geom_polygon(data = map_data %>% filter(county_name %in% roanoke_county), aes(x=long, y=lat, group=group, fill = totalProp_2YearCollegeEnrollment), color = "darkgrey") +
-    scale_fill_continuous(limits = c(0,1)) +
+    scale_fill_gradient(limits = c(0,1), low = "white", high = "navyblue") +
     labs(title = "Proportion of students enrolling in 2-year colleges", fill = "Proportion") +
     coord_equal(ratio=1)+
     geom_text(data = appalachia.labels %>% filter(county_name %in% roanoke_county), aes(x=Longitude,y=Latitude, label=id))
@@ -225,7 +225,7 @@ ggsave("Code/Maddie/output/ROANOKECOmap_prop_2year.png", device = "png", width =
 ggplot() + 
     #geom_polygon(data = virginia_t, aes(x = long, y = lat, group = group), fill=NA,color='black') +
     geom_polygon(data = map_data %>% filter(county_name %in% roanoke_county), aes(x=long, y=lat, group=group, fill = totalProp_4YearCollegeEnrollment), color = "darkgrey") +
-    scale_fill_continuous(limits = c(0,1)) +
+    scale_fill_gradient(limits = c(0,1), low = "white", high = "navyblue") +
     labs(title = "Proportion of students enrolling in 4-year colleges", fill = "Proportion")+
     coord_equal(ratio=1)+
     geom_text(data = appalachia.labels %>% filter(county_name %in% roanoke_county), aes(x=Longitude,y=Latitude, label=id))
@@ -235,7 +235,7 @@ ggsave("Code/Maddie/output/ROANOKECOmap_prop_4year.png", device = "png", width =
 ggplot() + 
     #geom_polygon(data = virginia_t, aes(x = long, y = lat, group = group), fill=NA,color='black') +
     geom_polygon(data = map_data %>% filter(county_name %in% roanoke_county), aes(x=long, y=lat, group=group, fill = disadvY_2_year_ps_prop), color = "darkgrey") +
-    scale_fill_continuous(limits = c(0,1)) +
+    scale_fill_gradient(limits = c(0,1), low = "white", high = "navyblue") +
     labs(title = "Proportion of disadvantaged students enrolling in 2-year colleges", fill = "Proportion") +
     coord_equal(ratio=1)+
     geom_text(data = appalachia.labels %>% filter(county_name %in% roanoke_county), aes(x=Longitude,y=Latitude, label=id))
@@ -245,7 +245,7 @@ ggsave("Code/Maddie/output/ROANOKECOmap_prop_disadv2year.png", device = "png", w
 ggplot() + 
     #geom_polygon(data = virginia_t, aes(x = long, y = lat, group = group), fill=NA,color='black') +
     geom_polygon(data = map_data %>% filter(county_name %in% roanoke_county), aes(x=long, y=lat, group=group, fill = disadvY_4_year_ps_prop), color = "darkgrey") +
-    scale_fill_continuous(limits = c(0,1)) +
+    scale_fill_gradient(limits = c(0,1), low = "white", high = "navyblue") +
     labs(title = "Proportion of disadvantaged students enrolling in 4-year colleges", fill = "Proportion") +
     coord_equal(ratio=1)+
     geom_text(data = appalachia.labels %>% filter(county_name %in% roanoke_county), aes(x=Longitude,y=Latitude, label=id))
