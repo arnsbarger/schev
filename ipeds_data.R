@@ -160,7 +160,7 @@ for(i in 1:length(counties)){
 
 highschools[22, 30:37] <- NA 
 
-write.csv(highschools[,-c(1:2)], "produced_data_sets/select_ipeds_vars.csv")
+write.csv(highschools[,-c(1:2)], "output/select_ipeds_vars.csv")
 
 # net cost median, average, min, and max ####
 # Average net price for full-time, first-time degree/certificate-seeking undergraduates paying the in-state or in-district tuition rate who were awarded 
