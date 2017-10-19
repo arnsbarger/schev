@@ -14,7 +14,7 @@ ic2015_ay <- read.csv("Institutional Characteristics/ic2015_ay.csv")
 hd_icay2015 <- merge(hd2015, ic2015_ay, by = "UNITID", all.x = TRUE, all.y = FALSE)
 
 # add financial aid data
-fanp <- read.csv("Student Financial Aid and Net Price/sfa1415.csv", na.strings=c("",".","NA"))
+fanp <- read.csv("Student Financial Aid and Net Price/sfa1516.csv", na.strings=c("",".","NA"))
 hd_icay_fanp2015 <- merge(hd_icay2015, fanp, by = "UNITID", all.x = TRUE)
 
 # add admissions data
@@ -22,11 +22,27 @@ admissions <- read.csv("Admissions and Test Scores/adm2015.csv")
 ipeds_final <- merge(hd_icay_fanp2015, admissions, by = "UNITID", all.x = TRUE)
 
 # subset - keep only requested variables
-ipeds_final <- ipeds_final[, c("UAGRNTP", # percent of students to receive aid of any type
+ipeds_final <- ipeds_final[, c("INSTNM", # school name
+                               "UNITID", # institution id
+                               "COUNTYNM", # county name
+                               "C15IPUG", # school type
+                               "UAGRNTP", # percent of students to receive aid of any type
                                "UAGRNTT", # sum of aid of any type given to students
                                "UAGRNTA", # average amount of aid of any type given to students
                                "NPIST1", # average net price
                                "SATPCT", # percent of students submitting SAT scores
                                "ACTPCT")] # percent of students submitting ACT scores
 
-names(ipeds_final) <- c("percent_receive_any_aid", "sum_total_aid","mean_aid_awarded","average_net_price","percent_submit_SAT","percent_submit_ACT")
+ipeds_final$coded_sch_type <- NA
+ipeds_final$coded_sch_type[ipeds_final$C15IPUG %in% 6:17] <- "4 Year"
+ipeds_final$coded_sch_type[ipeds_final$C15IPUG %in% 1:2] <- "2 Year"
+ipeds_final$coded_sch_type[ipeds_final$C15IPUG %in% c(3:5,18:20)] <- "Career"
+ipeds_final$coded_sch_type[ipeds_final$C15IPUG == -2] <- "Vocational"
+ipeds_final$coded_sch_type[ipeds_final$C15IPUG == 0] <- "Not classified"
+
+names(ipeds_final) <- c("INSTNM","UNITID","COUNTYNM","ipeds_sch_type","percent_receive_any_aid", "sum_total_aid","mean_aid_awarded","average_net_price","percent_submit_SAT","percent_submit_ACT","coded_sch_type")
+colnames(ipeds_final) <- paste(colnames(ipeds_final), "1516", sep = "")
+
+ipeds_final[ipeds_final=='.'] <- NA
+
+write.csv(ipeds_final, "output/ipeds_subset1516.csv", row.names = FALSE)
