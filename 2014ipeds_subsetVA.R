@@ -30,8 +30,25 @@ ipeds_final <- ipeds_final[, c("INSTNM", # school name
                                "UAGRNTT", # sum of aid of any type given to students
                                "UAGRNTA", # average amount of aid of any type given to students
                                "NPIST1", # average net price
-                               "SATPCT", # percent of students submitting SAT scores
-                               "ACTPCT")] # percent of students submitting ACT scores
+                               "APPLCN", # number of applicants
+                               "ADMSSN", # number admitted
+                               "ENRLT", # number enrolled
+                               "SATPCT", # percent of applicants submitting SAT
+                               "ACTPCT", # percent of applicants submitting ACT
+                               "SATVR25", # SAT verbal 25 percentile
+                               "SATVR75", # SAT verbal 75 percentile
+                               "SATMT25", # SAT math 25 percentile
+                               "SATMT75", # SAT math 75 percentile
+                               "SATWR25", # SAT writing 25 percentile
+                               "SATWR75", # SAT writing 75 percentile
+                               "ACTCM25", # ACT math 25 percentile
+                               "ACTCM75", # ACT math 75 percentile
+                               "ACTEN25", # ACT english 25 percentile
+                               "ACTEN75", # ACT english 75 percentile
+                               "ACTMT25", # ACT math 25 percentile
+                               "ACTMT75", # ACT math 75 percentile
+                               "ACTWR25", # ACT writing 25 percentile
+                               "ACTWR75")] # ACT writing 75 percentile
 
 ipeds_final$coded_sch_type <- NA
 ipeds_final$coded_sch_type[ipeds_final$CCIPUG %in% 6:17] <- "4 Year"
@@ -40,7 +57,7 @@ ipeds_final$coded_sch_type[ipeds_final$CCIPUG %in% c(3:5,18:20)] <- "Career"
 ipeds_final$coded_sch_type[ipeds_final$CCIPUG %in% c(-2,-3)] <- "Vocational"
 ipeds_final$coded_sch_type[ipeds_final$CCIPUG == 0] <- "Not classified"
 
-names(ipeds_final) <- c("INSTNM","UNITID","COUNTYNM","ipeds_sch_type","percent_receive_any_aid", "sum_total_aid","mean_aid_awarded","average_net_price","percent_submit_SAT","percent_submit_ACT","coded_sch_type")
+names(ipeds_final) <- c("INSTNM","UNITID","COUNTYNM","ipeds_sch_type","percent_receive_any_aid", "sum_total_aid","mean_aid_awarded","average_net_price","total_applicants","total_admit","total_enroll","pct_submitSAT","pct_submitACT","SATread25pctl","SATread75pctl","SATmath25pctl","SATmath75pctl","SATwrite25pctl","SATwrite75pctl","ACT25pctl","ACT75pctl","ACTenglish25pctl","ACTenglish75pctl","ACTmath25pctl","ACTmath75pctl","ACTwrite25pctl","ACTwrite75pctl","coded_sch_type")
 colnames(ipeds_final) <- paste(colnames(ipeds_final), "1415", sep = "")
 
 ipeds_final[ipeds_final=='.'] <- NA
