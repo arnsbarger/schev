@@ -134,10 +134,9 @@ powhatan <- c("Goochland County", "Cumberland County", "Amelia County", "Chester
 # appalachia
 appalachia.sch <- c(bland_county, buchanan_county, roanoke_county, roanoke_city) # use to subset school boundary polygon
 #appalachia <- gsub(" .*", "", c(bland_county, buchanan_county, roanoke_county, roanoke_city)) # use to subset county polygon
-
 appalachia <- virginia_t.df %>% filter(NAME %in% gsub(" .*", "", c(bland_county, buchanan_county, roanoke_county, roanoke_city))) %>% filter(long < 1500000)
-
 #appalachia <- map_data %>% filter(county_name %in% appalachia.sch)
+
 # richmond
 eastern.sch <- c(richmond_city, sussex_county, powhatan)
 eastern <-  gsub(" County", "", c(richmond_city, sussex_county, powhatan))
@@ -172,10 +171,10 @@ ggsave("Code/Maddie/output/APPALACHIAmap_prop_2year.png", device = "png", width 
 
 # four year
 ggplot() + 
-    geom_polygon(data = virginia_t.df %>% filter(NAME %in% appalachia), aes(x = long, y = lat, group = group), fill=NA,color='black') +
+    geom_polygon(data = appalachia, aes(x = long, y = lat, group = group), fill=NA,color='black') +
     geom_polygon(data = map_data %>% filter(county_name %in% appalachia.sch), aes(x=long, y=lat, group=group, fill = totalProp_4YearCollegeEnrollment), color = "black", size = .1) +
     scale_fill_gradient(limits = c(0,1), low = "white", high = "navyblue") +
-    labs(title = "Proportion of students enrolling in 2-year colleges", fill = "Proportion", x="",y="") +
+    labs(title = "Proportion of students enrolling in 4-year colleges", fill = "Proportion", x="",y="") +
     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
           panel.background = element_blank(), 
           axis.ticks.y = element_blank(),axis.text.y = element_blank(), # get rid of x ticks/text
@@ -187,7 +186,7 @@ ggsave("Code/Maddie/output/APPALACHIAmap_prop_4year.png", device = "png", width 
 
 # disadvantaged two year
 ggplot() + 
-    geom_polygon(data = virginia_t.df %>% filter(NAME %in% appalachia), aes(x = long, y = lat, group = group), fill=NA,color='black') +
+    geom_polygon(data = appalachia, aes(x = long, y = lat, group = group), fill=NA,color='black') +
     geom_polygon(data = map_data %>% filter(county_name %in% appalachia.sch), aes(x=long, y=lat, group=group, fill = disadvY_2_year_ps_prop), color = "black", size = .1) +
     scale_fill_gradient(limits = c(0,1), low = "white", high = "navyblue") +
     labs(title = "Proportion of disadvantaged students enrolling in 2-year colleges", fill = "Proportion", x="",y="") +
@@ -202,11 +201,11 @@ ggsave("Code/Maddie/output/APPALACHIAmap_prop_disadv2year.png", device = "png", 
 
 # disadvantaged four year
 ggplot() + 
-    geom_polygon(data = virginia_t.df %>% filter(NAME %in% appalachia), aes(x = long, y = lat, group = group), fill=NA,color='black') +
+    geom_polygon(data = appalachia, aes(x = long, y = lat, group = group), fill=NA,color='black') +
     geom_polygon(data = map_data %>% filter(county_name %in% appalachia.sch), aes(x=long, y=lat, group=group, fill = disadvY_4_year_ps_prop), color = "black", size = .1) +
     geom_text(data = appalachia.labels, aes(label = gsub("High", "",id), x = Longitude, y = Latitude), size = 2) +
     scale_fill_gradient(limits = c(0,1), low = "white", high = "navyblue") +
-    labs(title = "Proportion of disadvantaged students enrolling in 2-year colleges", fill = "Proportion", x="",y="") +
+    labs(title = "Proportion of disadvantaged students enrolling in 4-year colleges", fill = "Proportion", x="",y="") +
     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
           panel.background = element_blank(), 
           axis.ticks.y = element_blank(),axis.text.y = element_blank(), # get rid of x ticks/text
@@ -221,7 +220,7 @@ ggsave("Code/Maddie/output/APPALACHIAmap_prop_disadv4year.png", device = "png", 
 ggplot() + 
     geom_polygon(data = virginia_t.df %>% filter(NAME %in% eastern), aes(x = long, y = lat, group = group), fill=NA,color='black') +
     geom_polygon(data = map_data %>% filter(county_name %in% eastern.sch), aes(x=long, y=lat, group=group, fill = totalProp_2YearCollegeEnrollment), color = "black", size = .1) +
-    #geom_text(data = eastern.labels, aes(label = gsub("High", "",id), x = Longitude, y = Latitude), size = 2) +
+    geom_text(data = eastern.labels, aes(label = gsub("High", "",id), x = Longitude, y = Latitude), size = 2) +
     scale_fill_gradient(limits = c(0,1), low = "white", high = "navyblue") +
     labs(title = "Proportion of students enrolling in 2-year colleges", fill = "Proportion", x="",y="") +
     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
