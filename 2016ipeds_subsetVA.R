@@ -61,13 +61,13 @@ ipeds_final$coded_sch_type[ipeds_final$C15IPUG %in% c(3:5,18:20)] <- "Career"
 ipeds_final$coded_sch_type[ipeds_final$C15IPUG == -2] <- "Vocational"
 ipeds_final$coded_sch_type[ipeds_final$C15IPUG == 0] <- "Not classified"
 
-names(ipeds_final) <- c("INSTNM","UNITID","COUNTYNM","ipeds_sch_type"
-                        #,"percent_receive_any_aid", "sum_total_aid","mean_aid_awarded","average_net_price"
-                        ,"total_applicants","total_admit","total_enroll","pct_submitSAT","pct_submitACT","SATread25pctl","SATread75pctl","SATmath25pctl","SATmath75pctl"
-                        #,"SATwrite25pctl","SATwrite75pctl"
-                        ,"ACT25pctl","ACT75pctl","ACTenglish25pctl","ACTenglish75pctl","ACTmath25pctl","ACTmath75pctl"
-                        #,"ACTwrite25pctl","ACTwrite75pctl"
-                        ,"coded_sch_type")
+# names(ipeds_final) <- c("INSTNM","UNITID","COUNTYNM","ipeds_sch_type"
+#                         #,"percent_receive_any_aid", "sum_total_aid","mean_aid_awarded","average_net_price"
+#                         ,"total_applicants","total_admit","total_enroll","pct_submitSAT","pct_submitACT","SATread25pctl","SATread75pctl","SATmath25pctl","SATmath75pctl"
+#                         #,"SATwrite25pctl","SATwrite75pctl"
+#                         ,"ACT25pctl","ACT75pctl","ACTenglish25pctl","ACTenglish75pctl","ACTmath25pctl","ACTmath75pctl"
+#                         #,"ACTwrite25pctl","ACTwrite75pctl"
+#                         ,"coded_sch_type")
 colnames(ipeds_final) <- paste(colnames(ipeds_final), "1617", sep = "")
 
 ipeds_final[ipeds_final=='.'] <- NA

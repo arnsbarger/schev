@@ -18,7 +18,7 @@ fanp <- read.csv("Student Financial Aid and Net Price/sfa1415.csv", na.strings=c
 hd_icay_fanp2014 <- merge(hd_icay2014, fanp, by = "UNITID", all.x = TRUE)
 
 # add admissions data
-admissions <- read.csv("Admissions and Test Scores/ADM2014/adm2014.csv")
+admissions <- read.csv("Admissions and Test Scores/adm2014.csv")
 ipeds_final <- merge(hd_icay_fanp2014, admissions, by = "UNITID", all.x = TRUE)
 
 # subset - keep only requested variables
@@ -57,7 +57,7 @@ ipeds_final$coded_sch_type[ipeds_final$CCIPUG %in% c(3:5,18:20)] <- "Career"
 ipeds_final$coded_sch_type[ipeds_final$CCIPUG %in% c(-2,-3)] <- "Vocational"
 ipeds_final$coded_sch_type[ipeds_final$CCIPUG == 0] <- "Not classified"
 
-names(ipeds_final) <- c("INSTNM","UNITID","COUNTYNM","ipeds_sch_type","percent_receive_any_aid", "sum_total_aid","mean_aid_awarded","average_net_price","total_applicants","total_admit","total_enroll","pct_submitSAT","pct_submitACT","SATread25pctl","SATread75pctl","SATmath25pctl","SATmath75pctl","SATwrite25pctl","SATwrite75pctl","ACT25pctl","ACT75pctl","ACTenglish25pctl","ACTenglish75pctl","ACTmath25pctl","ACTmath75pctl","ACTwrite25pctl","ACTwrite75pctl","coded_sch_type")
+#names(ipeds_final) <- c("INSTNM","UNITID","COUNTYNM","ipeds_sch_type","percent_receive_any_aid", "sum_total_aid","mean_aid_awarded","average_net_price","total_applicants","total_admit","total_enroll","pct_submitSAT","pct_submitACT","SATread25pctl","SATread75pctl","SATmath25pctl","SATmath75pctl","SATwrite25pctl","SATwrite75pctl","ACT25pctl","ACT75pctl","ACTenglish25pctl","ACTenglish75pctl","ACTmath25pctl","ACTmath75pctl","ACTwrite25pctl","ACTwrite75pctl","coded_sch_type")
 colnames(ipeds_final) <- paste(colnames(ipeds_final), "1415", sep = "")
 
 ipeds_final[ipeds_final=='.'] <- NA
