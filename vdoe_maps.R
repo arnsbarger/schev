@@ -214,70 +214,6 @@ ggplot() +
           plot.caption = element_text(hjust=0)) +
     coord_equal(ratio=1)
 ggsave("Code/Maddie/output/APPALACHIAmap_prop_disadv4year.png", device = "png", width = 11, height = 6, units = "in")
-
-# RICHMOND/EASTERN ------
-# two year
-ggplot() + 
-    geom_polygon(data = virginia_t.df %>% filter(NAME %in% eastern), aes(x = long, y = lat, group = group), fill=NA,color='black') +
-    geom_polygon(data = map_data %>% filter(county_name %in% eastern.sch), aes(x=long, y=lat, group=group, fill = totalProp_2YearCollegeEnrollment), color = "black", size = .1) +
-    geom_text(data = eastern.labels, aes(label = gsub("High", "",id), x = Longitude, y = Latitude), size = 2) +
-    scale_fill_gradient(limits = c(0,1), low = "white", high = "navyblue") +
-    labs(title = "Proportion of students enrolling in 2-year colleges", fill = "Proportion", x="",y="") +
-    theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-          panel.background = element_blank(), 
-          axis.ticks.y = element_blank(),axis.text.y = element_blank(), # get rid of x ticks/text
-          axis.ticks.x = element_blank(),axis.text.x = element_blank(), # get rid of y ticks/text
-          plot.title = element_text(lineheight=.8, face="bold", vjust=1, hjust = .5),
-          plot.caption = element_text(hjust=0)) +
-    coord_equal(ratio=1)
-ggsave("Code/Maddie/output/RICHMONDmap_prop_2year.png", device = "png", width = 11, height = 6, units = "in")
-
-# four year
-ggplot() + 
-    geom_polygon(data = virginia_t.df %>% filter(NAME %in% eastern), aes(x = long, y = lat, group = group), fill=NA,color='black') +
-    geom_polygon(data = map_data %>% filter(county_name %in% eastern.sch), aes(x=long, y=lat, group=group, fill = totalProp_4YearCollegeEnrollment), color = "black", size = .1) +
-    scale_fill_gradient(limits = c(0,1), low = "white", high = "navyblue") +
-    labs(title = "Proportion of students enrolling in 2-year colleges", fill = "Proportion", x="",y="") +
-    theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-          panel.background = element_blank(), 
-          axis.ticks.y = element_blank(),axis.text.y = element_blank(), # get rid of x ticks/text
-          axis.ticks.x = element_blank(),axis.text.x = element_blank(), # get rid of y ticks/text
-          plot.title = element_text(lineheight=.8, face="bold", vjust=1, hjust = .5),
-          plot.caption = element_text(hjust=0)) +
-    coord_equal(ratio=1)
-ggsave("Code/Maddie/output/RICHMONDmap_prop_4year.png", device = "png", width = 11, height = 6, units = "in")
-
-# disadvantaged two year
-ggplot() + 
-    geom_polygon(data = virginia_t.df %>% filter(NAME %in% eastern), aes(x = long, y = lat, group = group), fill=NA,color='black') +
-    geom_polygon(data = map_data %>% filter(county_name %in% eastern.sch), aes(x=long, y=lat, group=group, fill = disadvY_2_year_ps_prop), color = "black", size = .1) +
-    scale_fill_gradient(limits = c(0,1), low = "white", high = "navyblue") +
-    labs(title = "Proportion of disadvantaged students enrolling in 2-year colleges", fill = "Proportion", x="",y="") +
-    theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-          panel.background = element_blank(), 
-          axis.ticks.y = element_blank(),axis.text.y = element_blank(), # get rid of x ticks/text
-          axis.ticks.x = element_blank(),axis.text.x = element_blank(), # get rid of y ticks/text
-          plot.title = element_text(lineheight=.8, face="bold", vjust=1, hjust = .5),
-          plot.caption = element_text(hjust=0)) +
-    coord_equal(ratio=1)
-ggsave("Code/Maddie/output/RICHMONDmap_prop_disadv2year.png", device = "png", width = 11, height = 6, units = "in")
-
-# disadvantaged four year
-ggplot() + 
-    geom_polygon(data = virginia_t.df %>% filter(NAME %in% eastern), aes(x = long, y = lat, group = group), fill=NA,color='black') +
-    geom_polygon(data = map_data %>% filter(county_name %in% eastern.sch), aes(x=long, y=lat, group=group, fill = disadvY_4_year_ps_prop), color = "black", size = .1) +
-    #geom_text(data = text.labels.df, aes(label = gsub(" .*", "",id), x = Longitude, y = Latitude), size = 2.5) +
-    scale_fill_gradient(limits = c(0,1), low = "white", high = "navyblue") +
-    labs(title = "Proportion of disadvantaged students enrolling in 2-year colleges", fill = "Proportion", x="",y="") +
-    theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-          panel.background = element_blank(), 
-          axis.ticks.y = element_blank(),axis.text.y = element_blank(), # get rid of x ticks/text
-          axis.ticks.x = element_blank(),axis.text.x = element_blank(), # get rid of y ticks/text
-          plot.title = element_text(lineheight=.8, face="bold", vjust=1, hjust = .5),
-          plot.caption = element_text(hjust=0)) +
-    coord_equal(ratio=1)
-ggsave("Code/Maddie/output/RICHMONDmap_prop_disadv4year.png", device = "png", width = 11, height = 6, units = "in")
-
 # ROANOKE ZOOM ---------
 # two year
 ggplot() + 
@@ -342,3 +278,136 @@ ggplot() +
     coord_equal(ratio=1)+
     geom_text(data = appalachia.labels %>% filter(county_name %in% roanoke_county), aes(x=Longitude,y=Latitude, label=id))
 ggsave("Code/Maddie/output/ROANOKECOmap_prop_disadv4year.png", device = "png", width = 11, height = 6, units = "in")
+
+# RICHMOND/EASTERN (all -- no edits) ------
+eastern_data <- map_data %>% filter(!sch_name_clean %in% c("Open High", "Richmond Community High"))
+richmond_data <- map_data %>% filter(county_name == "Richmond City") %>% filter(!sch_name_clean %in% c("Open High", "Richmond Community High"))
+# EASTERN (all non-appalachia schools, excluding open high and richmond community high) -----
+
+# two year
+ggplot() + 
+    geom_polygon(data = virginia_t.df %>% filter(NAME %in% eastern), aes(x = long, y = lat, group = group), fill=NA,color='black') +
+    geom_polygon(data = eastern_data %>% filter(county_name %in% eastern.sch), aes(x=long, y=lat, group=group, fill = totalProp_2YearCollegeEnrollment), color = "black", size = .1) +
+    geom_text(data = eastern.labels, aes(label = gsub("High", "",id), x = Longitude, y = Latitude), size = 2) +
+    scale_fill_gradient(limits = c(0,1), low = "white", high = "navyblue") +
+    labs(title = "Proportion of students enrolling in 2-year colleges", fill = "Proportion", x="",y="") +
+    theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+          panel.background = element_blank(), 
+          axis.ticks.y = element_blank(),axis.text.y = element_blank(), # get rid of x ticks/text
+          axis.ticks.x = element_blank(),axis.text.x = element_blank(), # get rid of y ticks/text
+          plot.title = element_text(lineheight=.8, face="bold", vjust=1, hjust = .5),
+          plot.caption = element_text(hjust=0)) +
+    coord_equal(ratio=1)
+ggsave("Code/Maddie/output/EASTERNmap_prop_2year.png", device = "png", width = 11, height = 6, units = "in")
+
+# four year
+ggplot() + 
+    geom_polygon(data = virginia_t.df %>% filter(NAME %in% eastern), aes(x = long, y = lat, group = group), fill=NA,color='black') +
+    geom_polygon(data = eastern_data %>% filter(county_name %in% eastern.sch), aes(x=long, y=lat, group=group, fill = totalProp_4YearCollegeEnrollment), color = "black", size = .1) +
+    scale_fill_gradient(limits = c(0,1), low = "white", high = "navyblue") +
+    labs(title = "Proportion of students enrolling in 2-year colleges", fill = "Proportion", x="",y="") +
+    theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+          panel.background = element_blank(), 
+          axis.ticks.y = element_blank(),axis.text.y = element_blank(), # get rid of x ticks/text
+          axis.ticks.x = element_blank(),axis.text.x = element_blank(), # get rid of y ticks/text
+          plot.title = element_text(lineheight=.8, face="bold", vjust=1, hjust = .5),
+          plot.caption = element_text(hjust=0)) +
+    coord_equal(ratio=1)
+ggsave("Code/Maddie/output/EASTERNmap_prop_4year.png", device = "png", width = 11, height = 6, units = "in")
+
+# disadvantaged two year
+ggplot() + 
+    geom_polygon(data = virginia_t.df %>% filter(NAME %in% eastern), aes(x = long, y = lat, group = group), fill=NA,color='black') +
+    geom_polygon(data = eastern_data %>% filter(county_name %in% eastern.sch), aes(x=long, y=lat, group=group, fill = disadvY_2_year_ps_prop), color = "black", size = .1) +
+    scale_fill_gradient(limits = c(0,1), low = "white", high = "navyblue") +
+    labs(title = "Proportion of disadvantaged students enrolling in 2-year colleges", fill = "Proportion", x="",y="") +
+    theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+          panel.background = element_blank(), 
+          axis.ticks.y = element_blank(),axis.text.y = element_blank(), # get rid of x ticks/text
+          axis.ticks.x = element_blank(),axis.text.x = element_blank(), # get rid of y ticks/text
+          plot.title = element_text(lineheight=.8, face="bold", vjust=1, hjust = .5),
+          plot.caption = element_text(hjust=0)) +
+    coord_equal(ratio=1)
+ggsave("Code/Maddie/output/EASTERNmap_prop_disadv2year.png", device = "png", width = 11, height = 6, units = "in")
+
+# disadvantaged four year
+ggplot() + 
+    geom_polygon(data = virginia_t.df %>% filter(NAME %in% eastern), aes(x = long, y = lat, group = group), fill=NA,color='black') +
+    geom_polygon(data = eastern_data %>% filter(county_name %in% eastern.sch), aes(x=long, y=lat, group=group, fill = disadvY_4_year_ps_prop), color = "black", size = .1) +
+    geom_text(data = eastern.labels, aes(label = gsub("High", "",id), x = Longitude, y = Latitude), size = 2) +
+    scale_fill_gradient(limits = c(0,1), low = "white", high = "navyblue") +
+    labs(title = "Proportion of disadvantaged students enrolling in 2-year colleges", fill = "Proportion", x="",y="") +
+    theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+          panel.background = element_blank(), 
+          axis.ticks.y = element_blank(),axis.text.y = element_blank(), # get rid of x ticks/text
+          axis.ticks.x = element_blank(),axis.text.x = element_blank(), # get rid of y ticks/text
+          plot.title = element_text(lineheight=.8, face="bold", vjust=1, hjust = .5),
+          plot.caption = element_text(hjust=0)) +
+    coord_equal(ratio=1)
+ggsave("Code/Maddie/output/EASTERNmap_prop_disadv4year.png", device = "png", width = 11, height = 6, units = "in")
+
+# FOCUS ON RICHMOND CITY ONLY (excluding open high and richmond community high) -------
+richmond.labels <- eastern.labels %>% filter(!id %in% c("Open High", "Richmond Community High"))
+# two year
+ggplot() + 
+    geom_polygon(data = virginia_t.df %>% filter(NAME %in% richmond_city), aes(x = long, y = lat, group = group), fill=NA,color='black') +
+    geom_polygon(data = richmond_data %>% filter(county_name %in% eastern.sch), aes(x=long, y=lat, group=group, fill = totalProp_2YearCollegeEnrollment), color = "black", size = .1) +
+    geom_text(data = richmond.labels %>% filter(county_name %in% richmond_city), aes(label = gsub("High", "",id), x = Longitude, y = Latitude), size = 2) +
+    scale_fill_gradient(limits = c(0,1), low = "white", high = "navyblue") +
+    labs(title = "Proportion of students enrolling in 2-year colleges", fill = "Proportion", x="",y="") +
+    theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+          panel.background = element_blank(), 
+          axis.ticks.y = element_blank(),axis.text.y = element_blank(), # get rid of x ticks/text
+          axis.ticks.x = element_blank(),axis.text.x = element_blank(), # get rid of y ticks/text
+          plot.title = element_text(lineheight=.8, face="bold", vjust=1, hjust = .5),
+          plot.caption = element_text(hjust=0)) +
+    coord_equal(ratio=1)
+ggsave("Code/Maddie/output/EASTERNmap_prop_2year.png", device = "png", width = 11, height = 6, units = "in")
+
+# four year
+ggplot() + 
+    geom_polygon(data = virginia_t.df %>% filter(NAME %in% richmond_city), aes(x = long, y = lat, group = group), fill=NA,color='black') +
+    geom_polygon(data = richmond_data %>% filter(county_name %in% eastern.sch), aes(x=long, y=lat, group=group, fill = totalProp_4YearCollegeEnrollment), color = "black", size = .1) +
+    scale_fill_gradient(limits = c(0,1), low = "white", high = "navyblue") +
+    labs(title = "Proportion of students enrolling in 2-year colleges", fill = "Proportion", x="",y="") +
+    theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+          panel.background = element_blank(), 
+          axis.ticks.y = element_blank(),axis.text.y = element_blank(), # get rid of x ticks/text
+          axis.ticks.x = element_blank(),axis.text.x = element_blank(), # get rid of y ticks/text
+          plot.title = element_text(lineheight=.8, face="bold", vjust=1, hjust = .5),
+          plot.caption = element_text(hjust=0)) +
+    coord_equal(ratio=1)
+ggsave("Code/Maddie/output/EASTERNmap_prop_4year.png", device = "png", width = 11, height = 6, units = "in")
+
+# disadvantaged two year
+ggplot() + 
+    geom_polygon(data = virginia_t.df %>% filter(NAME %in% richmond_city), aes(x = long, y = lat, group = group), fill=NA,color='black') +
+    geom_polygon(data = richmond_data %>% filter(county_name %in% eastern.sch), aes(x=long, y=lat, group=group, fill = disadvY_2_year_ps_prop), color = "black", size = .1) +
+    scale_fill_gradient(limits = c(0,1), low = "white", high = "navyblue") +
+    labs(title = "Proportion of disadvantaged students enrolling in 2-year colleges", fill = "Proportion", x="",y="") +
+    theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+          panel.background = element_blank(), 
+          axis.ticks.y = element_blank(),axis.text.y = element_blank(), # get rid of x ticks/text
+          axis.ticks.x = element_blank(),axis.text.x = element_blank(), # get rid of y ticks/text
+          plot.title = element_text(lineheight=.8, face="bold", vjust=1, hjust = .5),
+          plot.caption = element_text(hjust=0)) +
+    coord_equal(ratio=1)
+ggsave("Code/Maddie/output/EASTERNmap_prop_disadv2year.png", device = "png", width = 11, height = 6, units = "in")
+
+# disadvantaged four year
+ggplot() + 
+    geom_polygon(data = virginia_t.df %>% filter(NAME %in% richmond_city), aes(x = long, y = lat, group = group), fill=NA,color='black') +
+    geom_polygon(data = richmond_data %>% filter(county_name %in% eastern.sch), aes(x=long, y=lat, group=group, fill = disadvY_4_year_ps_prop), color = "black", size = .1) +
+    geom_text(data = richmond.labels %>% filter(county_name %in% richmond_city), aes(label = gsub("High", "",id), x = Longitude, y = Latitude), size = 2) +
+    scale_fill_gradient(limits = c(0,1), low = "white", high = "navyblue") +
+    labs(title = "Proportion of disadvantaged students enrolling in 2-year colleges", fill = "Proportion", x="",y="") +
+    theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+          panel.background = element_blank(), 
+          axis.ticks.y = element_blank(),axis.text.y = element_blank(), # get rid of x ticks/text
+          axis.ticks.x = element_blank(),axis.text.x = element_blank(), # get rid of y ticks/text
+          plot.title = element_text(lineheight=.8, face="bold", vjust=1, hjust = .5),
+          plot.caption = element_text(hjust=0)) +
+    coord_equal(ratio=1)
+ggsave("Code/Maddie/output/EASTERNmap_prop_disadv4year.png", device = "png", width = 11, height = 6, units = "in")
+
+
