@@ -362,14 +362,14 @@ ggplot() +
           plot.title = element_text(lineheight=.8, face="bold", vjust=1, hjust = .5),
           plot.caption = element_text(hjust=0)) +
     coord_equal(ratio=1)
-ggsave("Code/Maddie/output/EASTERNmap_prop_2year.png", device = "png", width = 11, height = 6, units = "in")
+ggsave("Code/Maddie/output/RICHMOND-ZOOMmap_prop_2year.png", device = "png", width = 11, height = 6, units = "in")
 
 # four year
 ggplot() + 
     geom_polygon(data = virginia_t.df %>% filter(NAME %in% richmond_city), aes(x = long, y = lat, group = group), fill=NA,color='black') +
     geom_polygon(data = richmond_data %>% filter(county_name %in% eastern.sch), aes(x=long, y=lat, group=group, fill = totalProp_4YearCollegeEnrollment), color = "black", size = .1) +
     scale_fill_gradient(limits = c(0,1), low = "white", high = "navyblue") +
-    labs(title = "Proportion of students enrolling in 2-year colleges", fill = "Proportion", x="",y="") +
+    labs(title = "Proportion of students enrolling in 4-year colleges", fill = "Proportion", x="",y="") +
     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
           panel.background = element_blank(), 
           axis.ticks.y = element_blank(),axis.text.y = element_blank(), # get rid of x ticks/text
@@ -377,7 +377,7 @@ ggplot() +
           plot.title = element_text(lineheight=.8, face="bold", vjust=1, hjust = .5),
           plot.caption = element_text(hjust=0)) +
     coord_equal(ratio=1)
-ggsave("Code/Maddie/output/EASTERNmap_prop_4year.png", device = "png", width = 11, height = 6, units = "in")
+ggsave("Code/Maddie/output/RICHMOND-ZOOMmap_prop_4year.png", device = "png", width = 11, height = 6, units = "in")
 
 # disadvantaged two year
 ggplot() + 
@@ -392,7 +392,7 @@ ggplot() +
           plot.title = element_text(lineheight=.8, face="bold", vjust=1, hjust = .5),
           plot.caption = element_text(hjust=0)) +
     coord_equal(ratio=1)
-ggsave("Code/Maddie/output/EASTERNmap_prop_disadv2year.png", device = "png", width = 11, height = 6, units = "in")
+ggsave("Code/Maddie/output/RICHMOND-ZOOMmap_prop_disadv2year.png", device = "png", width = 11, height = 6, units = "in")
 
 # disadvantaged four year
 ggplot() + 
@@ -400,7 +400,7 @@ ggplot() +
     geom_polygon(data = richmond_data %>% filter(county_name %in% eastern.sch), aes(x=long, y=lat, group=group, fill = disadvY_4_year_ps_prop), color = "black", size = .1) +
     geom_text(data = richmond.labels %>% filter(county_name %in% richmond_city), aes(label = gsub("High", "",id), x = Longitude, y = Latitude), size = 2) +
     scale_fill_gradient(limits = c(0,1), low = "white", high = "navyblue") +
-    labs(title = "Proportion of disadvantaged students enrolling in 2-year colleges", fill = "Proportion", x="",y="") +
+    labs(title = "Proportion of disadvantaged students enrolling in 4-year colleges", fill = "Proportion", x="",y="") +
     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
           panel.background = element_blank(), 
           axis.ticks.y = element_blank(),axis.text.y = element_blank(), # get rid of x ticks/text
@@ -408,6 +408,6 @@ ggplot() +
           plot.title = element_text(lineheight=.8, face="bold", vjust=1, hjust = .5),
           plot.caption = element_text(hjust=0)) +
     coord_equal(ratio=1)
-ggsave("Code/Maddie/output/EASTERNmap_prop_disadv4year.png", device = "png", width = 11, height = 6, units = "in")
+ggsave("Code/Maddie/output/RICHMOND-ZOOMmap_prop_disadv4year.png", device = "png", width = 11, height = 6, units = "in")
 
 
