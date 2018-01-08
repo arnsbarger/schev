@@ -20,35 +20,40 @@ for (i in 1: length(filenames)) {
   }
 }
 
-# student counts by grade and subpopulations (race/ethnicity,gender)
-membM<-melt(data1,id=c("Division.No.","Division.Name","School.No.","School.Name","Grade","year"))
-membM<-filter(membM,variable!="Total.Full.time.Students" & variable!="Part.time.Students" & variable!="Total..Full.time...Part.time.Students")
+data2 <- data1[, c("Division.No.","Division.Name","School.No.","School.Name","Grade")]
+data2$Division.Name <- gsub("CHARLOTTESVILLE CTY PBLC SCHS", "CHARLOTTESVILLE CITY PBLC SCHS", data2$Division.Name) # correct incorrect data entry
 
-membM$gender<-ifelse(str_sub(membM$variable,nchar(as.character(membM$variable))-4,nchar(as.character(membM$variable))-4)==".","M","F")
+# PK = PreKindergarten
+# JK = Junior Kindergarten
+# KA = Half-Day Kindergarten – AM
+# KP = Half-Day Kindergarten – PM
+# KG = Kindergarten
+# T1 = Transitional First Grade
+# 01 = Grade 1
+# 02 = Grade 2
+# 03 = Grade 3
+# 04 = Grade 4
+# 05 = Grade 5
+# 06 = Grade 6
+# 07 = Grade 7
+# 08 = Grade 8
+# 09 = Grade 9
+# 10 = Grade 10
+# 11 = Grade 11
+# 12 = Grade 12
+# PG = Post Graduate
+# TT = Test Taker
 
-# add race column
-# import race cw
-race_cw<-read.csv("~/Google Drive/SDAL Google Drive Folders/SCHEV (Peter Blake - Wendy Kang)/Code/Bianica/race_cw.csv")
-membM$race<-ifelse(str_sub(membM$variable,nchar(as.character(membM$variable))-4,nchar(as.character(membM$variable))-4)==".",
-                   str_sub(membM$variable,1,nchar(as.character(membM$variable))-5),
-                   str_sub(membM$variable,1,nchar(as.character(membM$variable))-7))
-membM<-left_join(membM,select(race_cw,race_desc,federal_race_desc_clean,federal_race_code),by=c("race"="race_desc"))
+# recreate old school_crosswalk csv, but for all of VA (sch_cw<-read.csv("~/Google Drive/SCHEV (Peter Blake - Wendy Kang)/Code/Bianica/school_crosswalk.csv",stringsAsFactors = F))
+data3 <- data2 %>% filter(Grade %in% c(9,10,11,12)) # subset high schools only
+data4 <- unique(data3[, c("Division.No.","Division.Name","School.No.","School.Name")])
 
-sch_cw<-read.csv("~/Google Drive/SDAL Google Drive Folders/SCHEV (Peter Blake - Wendy Kang)/Code/Bianica/school_crosswalk.csv",stringsAsFactors = F)
+names(data4) <- c("div_num","div_name","sch_num","sch_names") # use same column names
 
-# filter for schools of interest
-sch_cw$div_num<-as.numeric(sch_cw$div_num)
-df1<-left_join(sch_cw,membM,by=c("div_num"="Division.No.","sch_names"="School.Name"))
+library(stringr)
 
-# group schools
-df_summ<-group_by(df1,div_num,div_name,sch_name_clean,year,Grade,gender,federal_race_desc_clean,federal_race_code) %>%
-  summarise(value=sum(as.numeric(value)))
+data4$school_name_clean <- str_to_title(data4$sch_names)
+data4$county_name <- str_to_title(gsub(" PBLC SCHS", "", data4$div_name))
+data4$county_name <- gsub(" Co", " County", data4$county_name)
 
-# remove totals of zero
-df_summ<-filter(df_summ,value>0)
-
-write.csv(df_summ,"~/Google Drive/SDAL Google Drive Folders/SCHEV (Peter Blake - Wendy Kang)/Code/Bianica/vdoe_hs_fall_membership_by_subpopulation.csv")
-
-
-#grades<-filter(df_summ,variable=="grade" & year==2015)
-#write.csv(grades,"~/Google Drive/SDAL Google Drive Folders/SCHEV (Peter Blake - Wendy Kang)/Code/Bianica/vdoe_studentsbygrade.csv")
+write.csv(data4, "~/Google Drive/SCHEV (Peter Blake - Wendy Kang)/Code/Maddie/school_crosswalk-allVA.csv")
