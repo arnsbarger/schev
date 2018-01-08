@@ -1,10 +1,13 @@
+# ADAPTED FROM "~/Google Drive/SCHEV (Peter Blake - Wendy Kang)/Code/Bianica/VDOE_High_School_Summary_Data_by_Grade.R"
+# 1/8/2017
+
 library(dplyr)
 library(stringr)
 library(reshape2)
 library(gdata)
 
 ## get Virginia school data
-setwd("Data/VDOE/Fall Membership/")
+setwd("~/Google Drive/SCHEV (Peter Blake - Wendy Kang)/Data/VDOE/Fall Membership/")
 
 filenames<-list.files(pattern="school_summaries_ethnicity-", full.names=TRUE)
 
