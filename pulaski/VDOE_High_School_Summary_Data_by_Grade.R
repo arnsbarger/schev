@@ -55,7 +55,7 @@ names(data4) <- c("div_num","div_name","sch_num","sch_names") # use same column 
 
 library(stringr)
 
-data4$school_name_clean <- str_to_title(data4$sch_names)
+data4$sch_name_clean <- str_to_title(data4$sch_names)
 data4$county_name <- str_to_title(gsub(" PBLC SCHS", "", data4$div_name))
 data4$county_name <- gsub(" Co", " County", data4$county_name)
 
