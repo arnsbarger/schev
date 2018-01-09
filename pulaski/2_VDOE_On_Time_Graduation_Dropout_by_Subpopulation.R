@@ -31,7 +31,7 @@ write.csv(data1,"~/Google Drive/SCHEV (Peter Blake - Wendy Kang)/Code/Maddie/pul
 # get postsec enrollment by subpopulations and by 2-year and 4-year
 grad<-filter(data1, DIV_NAME %in% sch_cw$county_name)
 
-grad<-filter(grad,DIV_NAME!="" & SCH_NAME=="")
+#grad<-filter(grad,DIV_NAME!="" & SCH_NAME=="") # removes all school-level data...
 
 # get clean school names
 grad$SCH_NAME2<-toupper(grad$SCH_NAME)

@@ -25,6 +25,7 @@ for (i in 1: length(filenames)) {
 
 data2 <- data1[, c("Division.No.","Division.Name","School.No.","School.Name","Grade")]
 data2$Division.Name <- gsub("CHARLOTTESVILLE CTY PBLC SCHS", "CHARLOTTESVILLE CITY PBLC SCHS", data2$Division.Name) # correct incorrect data entry
+data2$School.Name <- gsub("PULASKI COUNTY SR. HIGH", "PULASKI COUNTY SENIOR HIGH", data2$School.Name)
 
 # PK = PreKindergarten
 # JK = Junior Kindergarten
@@ -52,6 +53,8 @@ data3 <- data2 %>% filter(Grade %in% c(9,10,11,12)) # subset high schools only
 data4 <- unique(data3[, c("Division.No.","Division.Name","School.No.","School.Name")])
 
 names(data4) <- c("div_num","div_name","sch_num","sch_names") # use same column names
+
+
 
 library(stringr)
 
