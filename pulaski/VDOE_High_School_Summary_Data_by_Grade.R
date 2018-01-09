@@ -59,4 +59,4 @@ data4$sch_name_clean <- str_to_title(data4$sch_names)
 data4$county_name <- str_to_title(gsub(" PBLC SCHS", "", data4$div_name))
 data4$county_name <- gsub(" Co", " County", data4$county_name)
 
-write.csv(data4, "~/Google Drive/SCHEV (Peter Blake - Wendy Kang)/Code/Maddie/school_crosswalk-allVA.csv")
+write.csv(data4, "~/Google Drive/SCHEV (Peter Blake - Wendy Kang)/Code/Maddie/school_crosswalk-allVA.csv", row.names = FALSE)
