@@ -7,10 +7,11 @@ library(stringr)
 library(gdata)
 
 # school crosswalk
-sch_cw<-read.csv("~/Google Drive/SDAL Google Drive Folders/SCHEV (Peter Blake - Wendy Kang)/Code/Bianica/school_crosswalk.csv",stringsAsFactors = F)
+setwd("~/Google Drive/SCHEV (Peter Blake - Wendy Kang)")
+sch_cw <- read_csv("Code/Maddie/school_crosswalk-allVA.csv")
 
-offenses<-read.csv("~/Google Drive/SDAL Google Drive Folders/SCHEV (Peter Blake - Wendy Kang)/Data/VDOE/Safe School Information Resource/Student Offender Report.csv",stringsAsFactors = F)
-discOutcome<-read.csv("~/Google Drive/SDAL Google Drive Folders/SCHEV (Peter Blake - Wendy Kang)/Data/VDOE/Safe School Information Resource/Disciplinary Outcome Report.csv",stringsAsFactors = F)
+offenses<-read.csv("Data/VDOE/Safe School Information Resource/Student Offender Report.csv",stringsAsFactors = F)
+discOutcome<-read.csv("Data/VDOE/Safe School Information Resource/Disciplinary Outcome Report.csv",stringsAsFactors = F)
 
 # reformat data
 my.names <- offenses[16,]
@@ -33,18 +34,18 @@ discOutcome<-discOutcome[-1,]
 offenses<-offenses[,c(1:2,4:8)]
 discOutcome<-discOutcome[,c(1:2,4:9)]
 
-# filter for schools in study area
-offenses<-filter(offenses, `Division Name`=="Sussex County Public Schools" | `Division Name`=="Powhatan County Public Schools" | 
-                   `Division Name`=="Richmond City Public Schools" | `Division Name`=="Buchanan County Public Schools" |
-                   `Division Name`=="Bland County Public Schools" | `Division Name`=="Roanoke County Public Schools" | `Division Name`=="Roanoke City Public Schools")
+# # filter for schools in study area
+# offenses<-filter(offenses, `Division Name`=="Sussex County Public Schools" | `Division Name`=="Powhatan County Public Schools" | 
+#                    `Division Name`=="Richmond City Public Schools" | `Division Name`=="Buchanan County Public Schools" |
+#                    `Division Name`=="Bland County Public Schools" | `Division Name`=="Roanoke County Public Schools" | `Division Name`=="Roanoke City Public Schools")
 
 offenses$sch_name2<-toupper(offenses$`School Name`)
 offenses$sch_name2<-trim(offenses$sch_name2)
 offenses1<-left_join(sch_cw,offenses,by=c("sch_names"="sch_name2"))
 
-discOutcome<-filter(discOutcome, `Division Name`=="Sussex County Public Schools" | `Division Name`=="Powhatan County Public Schools" | 
-                   `Division Name`=="Richmond City Public Schools" | `Division Name`=="Buchanan County Public Schools" |
-                   `Division Name`=="Bland County Public Schools" | `Division Name`=="Roanoke County Public Schools" | `Division Name`=="Roanoke City Public Schools")
+# discOutcome<-filter(discOutcome, `Division Name`=="Sussex County Public Schools" | `Division Name`=="Powhatan County Public Schools" | 
+#                    `Division Name`=="Richmond City Public Schools" | `Division Name`=="Buchanan County Public Schools" |
+#                    `Division Name`=="Bland County Public Schools" | `Division Name`=="Roanoke County Public Schools" | `Division Name`=="Roanoke City Public Schools")
 
 discOutcome$sch_name2<-toupper(discOutcome$`School Name`)
 discOutcome$sch_name2<-trim(discOutcome$sch_name2)
@@ -65,5 +66,5 @@ offenses2<-group_by(offenses1,div_num,div_name,sch_name_clean,schoolYear=`School
 discOutcome2<-group_by(discOutcome1,div_num,div_name,sch_name_clean,disciplineType=`Discipline Type`,schoolYear=`School Year`) %>%
   summarise(numStudentOffenses=sum(numStudentOffenses))
 
-write.csv(offenses2,"~/Google Drive/SDAL Google Drive Folders/SCHEV (Peter Blake - Wendy Kang)/Code/Bianica/vdoe_student_offenses.csv")
-write.csv(discOutcome2,"~/Google Drive/SDAL Google Drive Folders/SCHEV (Peter Blake - Wendy Kang)/Code/Bianica/vdoe_disciplinary_outcome.csv")
+write.csv(offenses2,"Code/Maddie/pulaski/vdoe_student_offenses-allVA.csv")
+write.csv(discOutcome2,"Code/Maddie/pulaski/vdoe_disciplinary_outcome-allVA.csv")
