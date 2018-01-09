@@ -10,7 +10,7 @@ setwd("~/Google Drive/SCHEV (Peter Blake - Wendy Kang)/Data/VDOE/On-Time Graduat
 sch_cw<-read.csv("~/Google Drive/SCHEV (Peter Blake - Wendy Kang)/Code/Maddie/school_crosswalk-allVA.csv",stringsAsFactors = F)
 
 # postsec enrollment - 2011-2013
-filenames<-list.files(pattern="_cohort.csv", full.names=TRUE)
+filenames <- list.files(pattern="_cohort.csv", full.names=TRUE)
 
 for (i in 1: length(filenames)) {
   
@@ -26,7 +26,7 @@ for (i in 1: length(filenames)) {
 data1$DIV_NAME <- str_trim(data1$DIV_NAME)
 data1$SCH_NAME <- str_trim(data1$SCH_NAME)
 
-#write.csv(data1,"~/Google Drive/SDAL Google Drive Folders/SCHEV (Peter Blake - Wendy Kang)/Code/Bianica/vdoe_on_time_grad_all_schools.csv")
+write.csv(data1,"~/Google Drive/SCHEV (Peter Blake - Wendy Kang)/Code/Maddie/pulaski/vdoe_on_time_grad_all_schools.csv")
 
 # get postsec enrollment by subpopulations and by 2-year and 4-year
 grad<-filter(data1, DIV_NAME %in% sch_cw$county_name)
