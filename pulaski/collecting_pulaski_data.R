@@ -27,10 +27,16 @@ vdoe_student_offenses_allVA$year_fall <- as.numeric(gsub("\\-.*","", vdoe_studen
 
 
 # DIPLOMA COMPLETION
-vdoe_hs_completer_dimploma_by_disadv_allVA <- read_csv("~/Google Drive/SCHEV (Peter Blake - Wendy Kang)/Code/Maddie/pulaski/vdoe_hs_completer_dimploma_by_disadv-allVA.csv")
-vdoe_hs_completer_dimploma_by_disadv_allVA$year_fall <- as.numeric(gsub("\\-.*","", vdoe_hs_completer_dimploma_by_disadv_allVA$SCHOOL_YEAR))
+vdoe_hs_completer_by_disadv_allVA <- read_csv("~/Google Drive/SCHEV (Peter Blake - Wendy Kang)/Code/Maddie/pulaski/vdoe_hs_completer_dimploma_by_disadv-allVA.csv")
+vdoe_hs_completer_by_disadv_allVA$year_fall <- as.numeric(gsub("\\-.*","", vdoe_hs_completer_by_disadv_allVA$SCHOOL_YEAR))
 
 
-vdoe_hs_completer_dimploma_by_gender_allVA <- read_csv("~/Google Drive/SCHEV (Peter Blake - Wendy Kang)/Code/Maddie/pulaski/vdoe_hs_completer_dimploma_by_gender-allVA.csv")
-vdoe_hs_completer_dimploma_by_gender_allVA$year_fall <- as.numeric(gsub("\\-.*","", vdoe_hs_completer_dimploma_by_gender_allVA$SCHOOL_YEAR))
+vdoe_hs_completer_by_gender_allVA <- read_csv("~/Google Drive/SCHEV (Peter Blake - Wendy Kang)/Code/Maddie/pulaski/vdoe_hs_completer_dimploma_by_gender-allVA.csv")
+vdoe_hs_completer_by_gender_allVA$year_fall <- as.numeric(gsub("\\-.*","", vdoe_hs_completer_by_gender_allVA$SCHOOL_YEAR))
+
+# CTE ####
+cte2014 <- read_csv("~/Google Drive/SCHEV (Peter Blake - Wendy Kang)/Data/VDOE/Career & Technical Education Program Graduates and Completers/2014-cte-comp.csv")
+
+save(list = ls(all.names = TRUE), file = "Code/Maddie/pulaski/pulaski_vis_data.RData", envir = .GlobalEnv)
+
 
