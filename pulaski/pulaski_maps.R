@@ -17,26 +17,34 @@ boundaries <- read_shape("Data/School Attendance Boundaries/SABS_1314_SchoolLeve
 boundaries$schnam <- gsub("PULASKI HIGH SCHOOL", "PULASKI COUNTY SENIOR HIGH", boundaries$schnam)
 # filter for schools in virginia
 va_boundaries <- boundaries[which(str_sub(as.character(boundaries$leaid),1,2)=="51"),] # Virginia
-# get school names we're interested in
-sch_names<-left_join(sch_cw,va_boundaries@data,by=c("sch_names"="schnam"))
-sch_names<- sch_names[which(sch_names$county_name %in% NRV),] # study area (NRV = New River Valley)
-sch_names<-sch_names$sch_names
-# filter for schools in study area
-sch_boundaries <- va_boundaries[which(va_boundaries$schnam %in% sch_names),] # study area 
 
-# add clean school name to shapefile data
-boundary_data<-left_join(sch_boundaries@data,sch_cw,by=c("schnam"="sch_names"))
-sch_boundaries@data<-boundary_data
 # import county shapefile
 usa <- read_shape("~/Downloads/cb_2016_us_county_5m/cb_2016_us_county_5m.shp")
 # filter for Virginia
 virginia <-usa[usa@data$STATEFP==51,]
 # transform CRS of virginia to that of sch_boundaries
-virginia_t <- spTransform(virginia, CRS(proj4string(sch_boundaries)))
+virginia_t <- spTransform(virginia, CRS(proj4string(va_boundaries)))
+
+pulaski_t <- virginia_t[virginia_t$NAME=="Pulaski",]
+
+# add pulaski row to school va_boundaries shp
+pulaski_t@data <- data.frame(SrcName = NA, ncessch = NA, schnam = "PULASKI COUNTY SENIOR HIGH", leaid = "5100060",updateDate=NA,gslo=NA,gshi=NA,defacto=NA,stAbbrev="VA",sLevel=NA,openEnroll=0,MultiBdy=0,Shape_Leng=NA,Shape_Area=828438966)
+new_shp <- rbind(va_boundaries, pulaski_t)
+
+# # get school names we're interested in
+# sch_names<-left_join(sch_cw,va_boundaries@data,by=c("sch_names"="schnam"))
+# #sch_names<- sch_names[which(sch_names$county_name %in% NRV),] # study area (NRV = New River Valley)
+# sch_names<-sch_names$sch_names
+# # filter for schools in study area
+# sch_boundaries <- va_boundaries[which(va_boundaries$schnam %in% sch_names),] # study area 
+# 
+# # add clean school name to shapefile data
+# boundary_data<-left_join(sch_boundaries@data,sch_cw,by=c("schnam"="sch_names"))
+# sch_boundaries@data<-boundary_data
 
 # plot
 plot(virginia_t)
-plot(sch_boundaries, col="orange", add=T)
+plot(new_shp, col="limegreen", add=T)
 
 # prepare for ggplot presentation
 sch_boundaries@data$id = rownames(sch_boundaries@data)
