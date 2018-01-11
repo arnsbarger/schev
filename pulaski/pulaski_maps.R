@@ -54,21 +54,21 @@ names(centroids.df) <- c("Longitude", "Latitude")
 text.labels.df <- left_join(data.frame(id = idList, centroids.df), sch_cw, by=c("id"="sch_name_clean"))
 
 
-# PLOT MAP ####
-map_data <- sch_boundaries.df
-map_data$female_dropout_rate2011 <- map_data$female_dropouts2011 / map_data$sch_total2011
-
-ggplot() + 
-    geom_polygon(data = virginia_t, aes(x = long, y = lat, group = group), fill=NA,color='black') +
-    geom_polygon(data = map_data, aes(x=long, y=lat, group=group, fill = female_dropout_rate2011), color = "black", size = .1) +
-    scale_fill_gradient(limits = c(0,0.015), low = "white", high = "red") +
-    geom_text(data = text.labels.df, aes(label = gsub("High", "",id), x = Longitude, y = Latitude), size = 3) +
-    theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-          panel.background = element_blank(),
-          axis.ticks.y = element_blank(),axis.text.y = element_blank(), # get rid of x ticks/text
-          axis.ticks.x = element_blank(),axis.text.x = element_blank(), # get rid of y ticks/text
-          plot.title = element_text(lineheight=.8, face="bold", vjust=1, hjust = .5),
-          plot.caption = element_text(hjust=0)) + #labels
-    # labs(title="Proportion of students enrolling in 2-year colleges", x="", y="", fill = "Proportion") +
-    coord_equal(ratio=1)
-ggsave("Code/Maddie/pulaski/vis/discipline_rate.png", device = "png", width = 11, height = 6, units = "in")
+# # PLOT MAP ####
+# map_data <- sch_boundaries.df
+# map_data$female_dropout_rate2011 <- map_data$female_dropouts2011 / map_data$sch_total2011
+# 
+# ggplot() + 
+#     geom_polygon(data = virginia_t, aes(x = long, y = lat, group = group), fill=NA,color='black') +
+#     geom_polygon(data = map_data, aes(x=long, y=lat, group=group, fill = female_dropout_rate2011), color = "black", size = .1) +
+#     scale_fill_gradient(limits = c(0,0.015), low = "white", high = "red") +
+#     geom_text(data = text.labels.df, aes(label = gsub("High", "",id), x = Longitude, y = Latitude), size = 3) +
+#     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+#           panel.background = element_blank(),
+#           axis.ticks.y = element_blank(),axis.text.y = element_blank(), # get rid of x ticks/text
+#           axis.ticks.x = element_blank(),axis.text.x = element_blank(), # get rid of y ticks/text
+#           plot.title = element_text(lineheight=.8, face="bold", vjust=1, hjust = .5),
+#           plot.caption = element_text(hjust=0)) + #labels
+#     # labs(title="Proportion of students enrolling in 2-year colleges", x="", y="", fill = "Proportion") +
+#     coord_equal(ratio=1)
+# ggsave("Code/Maddie/pulaski/vis/discipline_rate.png", device = "png", width = 11, height = 6, units = "in")
