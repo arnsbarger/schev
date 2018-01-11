@@ -30,6 +30,7 @@ map_data <- merge(sch_cw, total_students_sch, by.x = c("div_name","sch_names"), 
 
 # POST HS PLANS & DIPLOMA TYPE COUNTS
 vdoe_diploma_and_posths_plans_all_schools <- data.frame(vdoe_diploma_and_posths_plans_all_schools)[,-c(1,2,4,22)]
+map_data1 <- merge(map_data, vdoe_diploma_and_posths_plans_all_schools, by.x = c("county_name","sch_name_clean","year"), by.y = c("div_name","school_name","year"), all.x = TRUE)
 
 # sch_cw <- merge(sch_cw, vdoe_diploma_and_posths_plans_all_schools2011, by.x = c("county_name","sch_name_clean"), by.y = c("div_name2011","school_name2011"), all.x = TRUE)
 # sch_cw <- merge(sch_cw, vdoe_diploma_and_posths_plans_all_schools2012, by.x = c("county_name","sch_name_clean"), by.y = c("div_name2012","school_name2012"), all.x = TRUE)
@@ -38,23 +39,25 @@ vdoe_diploma_and_posths_plans_all_schools <- data.frame(vdoe_diploma_and_posths_
 # sch_cw <- merge(sch_cw, vdoe_diploma_and_posths_plans_all_schools2015, by.x = c("county_name","sch_name_clean"), by.y = c("div_name2015","school_name2015"), all.x = TRUE)
 
 # DROPOUTS
-dropouts <- cast(vdoe_ontimegrad_dropout_by_gender_allVA, div_name + sch_name_clean + year_fall ~ GENDER, value = "cohort_dropout_cnt")
-dropouts$total_dropouts <- dropouts$`F` + dropouts$M
-
-dropouts2011 <- dropouts[dropouts$year_fall=="2011",-3]
-dropouts2012 <- dropouts[dropouts$year_fall=="2012",-3]
-dropouts2013 <- dropouts[dropouts$year_fall=="2013",-3]
-dropouts2014 <- dropouts[dropouts$year_fall=="2014",-3]
-
-colnames(dropouts2011)[3:5] <- c("female_dropouts2011", "male_dropouts2011", "total_dropouts2011")
-colnames(dropouts2012)[3:5] <- c("female_dropouts2012", "male_dropouts2012", "total_dropouts2012")
-colnames(dropouts2013)[3:5] <- c("female_dropouts2013", "male_dropouts2013", "total_dropouts2013")
-colnames(dropouts2014)[3:5] <- c("female_dropouts2014", "male_dropouts2014", "total_dropouts2014")
-
-sch_cw <- merge(sch_cw, dropouts2011, by = c("div_name","sch_name_clean"), all.x = TRUE)
-sch_cw <- merge(sch_cw, dropouts2012, by = c("div_name","sch_name_clean"), all.x = TRUE)
-sch_cw <- merge(sch_cw, dropouts2013, by = c("div_name","sch_name_clean"), all.x = TRUE)
-sch_cw <- merge(sch_cw, dropouts2014, by = c("div_name","sch_name_clean"), all.x = TRUE)
+map_data2 <- merge(map_data1, vdoe_ontimegrad_dropout_by_gender_allVA, by.x = c("div_name","sch_name_clean","year"), by.y = c("div_name","sch_name_clean","year_fall"), all.x = TRUE)
+write.csv(map_data2, "Code/Maddie/pulaski/VDOE_long_format_merge-allVA.csv")
+# dropouts <- cast(vdoe_ontimegrad_dropout_by_gender_allVA, div_name + sch_name_clean + year_fall ~ GENDER, value = "cohort_dropout_cnt")
+# dropouts$total_dropouts <- dropouts$`F` + dropouts$M
+# 
+# dropouts2011 <- dropouts[dropouts$year_fall=="2011",-3]
+# dropouts2012 <- dropouts[dropouts$year_fall=="2012",-3]
+# dropouts2013 <- dropouts[dropouts$year_fall=="2013",-3]
+# dropouts2014 <- dropouts[dropouts$year_fall=="2014",-3]
+# 
+# colnames(dropouts2011)[3:5] <- c("female_dropouts2011", "male_dropouts2011", "total_dropouts2011")
+# colnames(dropouts2012)[3:5] <- c("female_dropouts2012", "male_dropouts2012", "total_dropouts2012")
+# colnames(dropouts2013)[3:5] <- c("female_dropouts2013", "male_dropouts2013", "total_dropouts2013")
+# colnames(dropouts2014)[3:5] <- c("female_dropouts2014", "male_dropouts2014", "total_dropouts2014")
+# 
+# sch_cw <- merge(sch_cw, dropouts2011, by = c("div_name","sch_name_clean"), all.x = TRUE)
+# sch_cw <- merge(sch_cw, dropouts2012, by = c("div_name","sch_name_clean"), all.x = TRUE)
+# sch_cw <- merge(sch_cw, dropouts2013, by = c("div_name","sch_name_clean"), all.x = TRUE)
+# sch_cw <- merge(sch_cw, dropouts2014, by = c("div_name","sch_name_clean"), all.x = TRUE)
 
 write.csv(sch_cw, "Code/Maddie/pulaski/VDOE_wide_format_merge-allVA.csv")
 
