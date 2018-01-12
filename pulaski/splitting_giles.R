@@ -113,3 +113,4 @@ giles_df <- data.frame(STATEFP=51,COUNTYFP=as.character(071), COUNTYNS=NA, AFFGE
 giles_poly <- SpatialPolygonsDataFrame(giles_hs, giles_df)
 plot(giles_poly)
 
+save(giles_poly, narrows_poly, file = "Code/Maddie/pulaski/giles_county_highschool_boundaries_polygons.RData")
