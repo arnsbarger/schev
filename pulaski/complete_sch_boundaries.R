@@ -83,7 +83,7 @@ lee_poly@data <- data.frame(SrcName = NA, ncessch = NA, schnam = "LEE HIGH", lea
 
 va_boundaries <- rbind(va_boundaries, thomaswalker_poly, lee_poly)
 
-# tazewell co - 3 high schools
+# tazewell co - 3 high schools ####
 tazewell_t <- virginia_t[virginia_t$NAME=="Tazewell",]
 
 parts <- chop_thirds(tazewell_t)
@@ -111,3 +111,40 @@ plot(graham_poly)
 graham_poly@data <- data.frame(SrcName = NA, ncessch = NA, schnam = "GRAHAM HIGH", leaid = "5100060",updateDate=NA,gslo=NA,gshi=NA,defacto=NA,stAbbrev="VA",sLevel=NA,openEnroll=0,MultiBdy=0,Shape_Leng=NA,Shape_Area=NA)
 
 va_boundaries <- rbind(va_boundaries, richlands_poly, tazewell_poly, graham_poly)
+
+# craig co - 1 high school ####
+craig_t <- virginia_t[virginia_t$NAME=="Craig",]
+craig_t@data <- data.frame(SrcName = NA, ncessch = NA, schnam = "CRAIG COUNTY HIGH", leaid = "5100060",updateDate=NA,gslo=NA,gshi=NA,defacto=NA,stAbbrev="VA",sLevel=NA,openEnroll=0,MultiBdy=0,Shape_Leng=NA,Shape_Area=828438966)
+va_boundaries <- rbind(va_boundaries, craig_t)
+
+# highland co - 1 high school ####
+highland_t <- virginia_t[virginia_t$NAME=="Highland",]
+highland_t@data <- data.frame(SrcName = NA, ncessch = NA, schnam = "HIGHLAND HIGH", leaid = "5100060",updateDate=NA,gslo=NA,gshi=NA,defacto=NA,stAbbrev="VA",sLevel=NA,openEnroll=0,MultiBdy=0,Shape_Leng=NA,Shape_Area=828438966)
+va_boundaries <- rbind(va_boundaries, highland_t)
+
+# grayson co - 1 high school ####
+grayson_t <- virginia_t[virginia_t$NAME=="Grayson",]
+grayson_t@data <- data.frame(SrcName = NA, ncessch = NA, schnam = "GRAYSON COUNTY HIGH", leaid = "5100060",updateDate=NA,gslo=NA,gshi=NA,defacto=NA,stAbbrev="VA",sLevel=NA,openEnroll=0,MultiBdy=0,Shape_Leng=NA,Shape_Area=828438966)
+va_boundaries <- rbind(va_boundaries, grayson_t)
+
+# patrick co - 1 high school ####
+patrick_t <- virginia_t[virginia_t$NAME=="Patrick",]
+patrick_t@data <- data.frame(SrcName = NA, ncessch = NA, schnam = "PATRICK COUNTY HIGH", leaid = "5100060",updateDate=NA,gslo=NA,gshi=NA,defacto=NA,stAbbrev="VA",sLevel=NA,openEnroll=0,MultiBdy=0,Shape_Leng=NA,Shape_Area=828438966)
+va_boundaries <- rbind(va_boundaries, patrick_t)
+
+# franklin co - 1 high school ####
+franklin_t <- virginia_t[virginia_t$NAME=="Franklin",]
+franklin_t@data <- data.frame(SrcName = NA, ncessch = NA, schnam = "FRANKLIN COUNTY HIGH", leaid = "5100060",updateDate=NA,gslo=NA,gshi=NA,defacto=NA,stAbbrev="VA",sLevel=NA,openEnroll=0,MultiBdy=0,Shape_Leng=NA,Shape_Area=828438966)
+franklin_t@data <- rbind(franklin_t@data, 
+                         data.frame(SrcName = NA, ncessch = NA, schnam = "UNKNOWN SHAPE", leaid = "5100060",updateDate=NA,gslo=NA,gshi=NA,defacto=NA,stAbbrev="VA",sLevel=NA,openEnroll=0,MultiBdy=0,Shape_Leng=NA,Shape_Area=828438966))
+franklin_t@polygons <- franklin_t@polygons[[2]]
+va_boundaries <- rbind(va_boundaries, franklin_t)
+
+
+
+
+
+
+
+
+
