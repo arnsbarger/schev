@@ -48,12 +48,14 @@ theme_map <- function(...) {
 # PREPARE COUNTY & SCHOOL BOUNDARY SHAPEFILES ####
 # import school boundary shapefile 
 boundaries <- read_shape("Data/School Attendance Boundaries/SABS_1314_SchoolLevels/SABS_1314_High.shp")
+boundaries <- spTransform(boundaries,CRS("+init=epsg:4326"))
+
 boundaries$schnam <- gsub("PULASKI HIGH SCHOOL", "PULASKI COUNTY SENIOR HIGH", boundaries$schnam)
 # filter for schools in virginia
 va_boundaries <- boundaries[which(str_sub(as.character(boundaries$leaid),1,2)=="51"),] # Virginia
 
 # import county shapefile
-usa <- read_shape("Data/GIS/cb_2016_us_county_5m.shp")
+usa <- read_shape("Data/GIS/cb_2016_us_county_5m/cb_2016_us_county_5m.shp")
 # filter for Virginia
 virginia <-usa[usa@data$STATEFP==51,]
 # transform CRS of virginia to that of sch_boundaries
@@ -67,6 +69,9 @@ pulaski_t@data <- data.frame(SrcName = NA, ncessch = NA, schnam = "PULASKI COUNT
 new_shp <- rbind(va_boundaries, pulaski_t)
 
 load("Code/Maddie/pulaski/giles_county_highschool_boundaries_polygons.RData")
+narrows_poly <- spTransform(narrows_poly, CRS(proj4string(va_boundaries)))
+giles_poly <- spTransform(giles_poly, CRS(proj4string(va_boundaries)))
+
 
 # plot
 plot(virginia_t)
@@ -157,28 +162,75 @@ text.labels.df2 <- text.labels.df %>% filter(id %in% c("NARROWS HIGH", "GILES HI
 # save(text.labels.df2, file = "Code/Maddie/pulaski/text.labels2.RData")
 
 load("Code/Maddie/pulaski/text.labels2.RData")
+library(ggmap)
+al1 = get_map(location = c(lon = -80.44353, lat = 37.05961), zoom = 9, source = "google", color ="bw")
+al2 = get_map(location = c(lon = -80.44353, lat = 37.05961), zoom = 9, source = "google")
 
-# "broken" map
-ggplot() +
-    geom_polygon(data = nrv_t.df, aes(x = long, y = lat, group = group), fill=NA,color='black') +
-    geom_polygon(data = map_data.nrv %>% filter(year == "2014"), aes(x=long, y=lat, group=group), color = "black", size = .1) +
-    coord_equal() +
-    theme_map() +
-    labs(title="Total student dropout rate (New River Valley, 2014-2015)", x="", y="", fill = "Dropout Rate") +
-    geom_text(data = text.labels.df2, aes(label = id_short, x = long_hs, y = lat_hs), size = 3)
+al1MAP = ggmap::ggmap(al1)
+al1MAP
 
+al2MAP = ggmap::ggmap(al2)
+
+pal <- rev(viridis_pal(alpha = 1, begin = 0, end = 1, direction = 1,
+                       option = "A")(20))[c(1,3,6,8,10,13,15,17,20)] 
+
+show_col(pal)
+
+
+# boundary maps
+# 1
+png("Code/Maddie/pulaski/vis/sch_boundary_map1.png", height = 900, width = 900)   
+al1MAP +
+   # geom_polygon(data = nrv_t.df, aes(x = long, y = lat, group = group), fill=NA,color='black') +
+    geom_polygon(data = map_data.nrv, aes(x=long, y=lat, group=group, fill=sch_name_clean), color = "black", size = .1, alpha=.5) +
+    geom_point(data = text.labels.df2, aes(x= long_hs, y = lat_hs), size = 4) +
+    #geom_label(data = text.labels.df2, aes(label = str_to_title(id), x = long_hs, y = lat_hs), vjust=-1, size = 5) +
+    scale_fill_manual(values=pal, name="School") + 
+    coord_fixed(ratio=1.2,xlim=range(map_data.nrv$long)+c(-.05,.05),ylim=range(map_data.nrv$lat)+c(-.05,.05)) +
+    theme(legend.text = element_text(size=15), legend.title = element_text(size=20), 
+          axis.text = element_blank(),
+          axis.title = element_blank(),
+          axis.ticks = element_blank())
+dev.off()
+# 2
+pdf("Code/Maddie/pulaski/vis/sch_boundary_map2.pdf", height = 9, width = 12)   
+al2MAP +
+    geom_polygon(data = map_data.nrv, aes(x=long, y=lat, group=group), fill="white",color = "black", size = .1, alpha=.9) +
+    geom_point(data = text.labels.df2, aes(x= long_hs, y = lat_hs), size = 4) +
+    geom_label(data = text.labels.df2, aes(label = str_to_title(id), x = long_hs, y = lat_hs), vjust=-1, size = 5) +
+    coord_fixed(ratio=1.2,xlim=range(map_data.nrv$long)+c(-.05,.05),ylim=range(map_data.nrv$lat)+c(-.05,.05)) +
+    theme(legend.text = element_text(size=15), legend.title = element_text(size=20), 
+          axis.text = element_blank(),
+          axis.title = element_blank(),
+          axis.ticks = element_blank())
+dev.off()
+
+png("Code/Maddie/pulaski/vis/sch_boundary_map19.1.png", height = 900, width = 900)   
+al1MAP +
+    # geom_polygon(data = nrv_t.df, aes(x = long, y = lat, group = group), fill=NA,color='black') +
+    geom_polygon(data = map_data.nrv, aes(x=long, y=lat, group=group, fill=sch_name_clean), color = "black", size = .1, alpha=.9) +
+    geom_point(data = text.labels.df2, aes(x= long_hs, y = lat_hs), size = 4) +
+    geom_point(data = text.labels.df2, aes(x= long_hs, y = lat_hs), size = 4, shape=1, color="white") +
+    #geom_label(data = text.labels.df2, aes(label = str_to_title(id), x = long_hs, y = lat_hs), vjust=-1, size = 5) +
+    scale_fill_manual(values=pal, name="School") + 
+    coord_fixed(ratio=1.2,xlim=range(map_data.nrv$long)+c(-.05,.05),ylim=range(map_data.nrv$lat)+c(-.05,.05)) +
+    theme(legend.text = element_text(size=15), legend.title = element_text(size=20), 
+          axis.text = element_blank(),
+          axis.title = element_blank(),
+          axis.ticks = element_blank())
+dev.off()
 
 # total drop out rate
 summary(map_data.nrv$cohort_dropout_rate)[6]
 
-total_dropout <- ggplot() +
-    geom_polygon(data = nrv_t.df, aes(x = long, y = lat, group = group), fill=NA,color='black') +
-    geom_polygon(data = map_data.nrv %>% filter(year == "2014"), aes(x=long, y=lat, group=group, fill = cohort_dropout_rate), color = "black", size = .1) +
-    scale_fill_gradient(limits = c(0,0.05), low = "white", high = "orangered") +
-    coord_equal() +
-    theme_map() +
-    labs(title="Total student dropout rate (New River Valley, 2014-2015)", x="", y="", fill = "Dropout Rate") +
-    geom_text(data = text.labels.df2, aes(label = id_short, x = Longitude, y = Latitude), size = 3)
+# total_dropout <- ggplot() +
+#     geom_polygon(data = nrv_t.df, aes(x = long, y = lat, group = group), fill=NA,color='black') +
+#     geom_polygon(data = map_data.nrv %>% filter(year == "2014"), aes(x=long, y=lat, group=group, fill = cohort_dropout_rate), color = "black", size = .1) +
+#     scale_fill_gradient(limits = c(0,0.05), low = "white", high = "orangered") +
+#     coord_equal() +
+#     theme_map() +
+#     labs(title="Total student dropout rate (New River Valley, 2014-2015)", x="", y="", fill = "Dropout Rate") +
+#     geom_text(data = text.labels.df2, aes(label = id_short, x = Longitude, y = Latitude), size = 3)
 
 # female drop out rate
 female_dropout <- ggplot() +
@@ -210,30 +262,41 @@ male_dropout <- ggplot() +
 #     labs(title="Percent of graduates earning a GED (New River Valley, 2011)", x="", y="", fill = "Percent") +
 #     geom_text(data = text.labels.df2, aes(label = id_short, x = Longitude, y = Latitude), size = 3)
 
-percent_grads_cont_ed <- ggplot() +
-    geom_polygon(data = nrv_t.df, aes(x = long, y = lat, group = group), fill=NA,color='black') +
-    geom_polygon(data = map_data.nrv %>% filter(year == "2014"), aes(x=long, y=lat, group=group, fill = percent_grads_cont_ed), color = "black", size = .1) +
-    scale_fill_gradient(limits = c(0.5,1), low = "white", high = "darkgreen") +
-    coord_equal() +
-    theme_map() +
-    labs(title="Percent of graduates continuing education (NRV, 2014-2015)", x="", y="", fill = "Percent") +
-    geom_text(data = text.labels.df2, aes(label = id_short, x = Longitude, y = Latitude), size = 3)
+text.labels.df2 <- text.labels.df %>% filter(id %in% c("NARROWS HIGH", "GILES HIGH", "PULASKI COUNTY SENIOR HIGH", "AUBURN HIGH","BLACKSBURG HIGH","CHRISTIANSBURG HIGH","EASTERN MONTGOMERY HIGH","RADFORD HIGH","FLOYD COUNTY HIGH"))
+# 
+# percent_grads_cont_ed <- ggplot() +
+#     geom_polygon(data = nrv_t.df, aes(x = long, y = lat, group = group), fill=NA,color='black') +
+#     geom_polygon(data = map_data.nrv %>% filter(year == "2014"), aes(x=long, y=lat, group=group, fill = percent_grads_cont_ed), color = "black", size = .1) +
+#     scale_fill_gradient(limits = c(0.5,1), low = "white", high = "darkgreen") +
+#     coord_equal() +
+#     theme_map() +
+#     labs(title="Percent of graduates continuing education (NRV, 2014-2015)", x="", y="", fill = "Percent") +
+#     geom_text(data = text.labels.df2, aes(label = id_short, x = Longitude, y = Latitude), size = 3)
+# 
+# percent_grads_employment <- ggplot() +
+#     geom_polygon(data = nrv_t.df, aes(x = long, y = lat, group = group), fill=NA,color='black') +
+#     geom_polygon(data = map_data.nrv %>% filter(year == "2014"), aes(x=long, y=lat, group=group, fill = percent_grads_employment), color = "black", size = .1) +
+#     scale_fill_gradient(c(.5,1),low = "white", high = "seagreen4") +
+#     coord_equal() +
+#     theme_map() +
+#     labs(title="Percent of graduates entering workforce (NRV, 2014-2015)", x="", y="", fill = "Percent") +
+#     geom_text(data = text.labels.df2, aes(label = id_short, x = Longitude, y = Latitude), size = 3)
 
-percent_grads_employment <- ggplot() +
-    geom_polygon(data = nrv_t.df, aes(x = long, y = lat, group = group), fill=NA,color='black') +
-    geom_polygon(data = map_data.nrv %>% filter(year == "2014"), aes(x=long, y=lat, group=group, fill = percent_grads_employment), color = "black", size = .1) +
-    scale_fill_gradient(c(.5,1),low = "white", high = "seagreen4") +
-    coord_equal() +
-    theme_map() +
-    labs(title="Percent of graduates entering workforce (NRV, 2014-2015)", x="", y="", fill = "Percent") +
-    geom_text(data = text.labels.df2, aes(label = id_short, x = Longitude, y = Latitude), size = 3)
+# student_offenses_ratio <- ggplot() +
+library(ggrepel)
+# map_data$student_offenses_ratio <- map_data$numStudentOffenses / map_data$total_students_sch
 
-student_offenses_ratio <- ggplot() +
+png("Code/Maddie/pulaski/vis/purple_NRV_disciplinary_map.png", 900, 900)
+    al1MAP +
     geom_polygon(data = nrv_t.df, aes(x = long, y = lat, group = group), fill=NA,color='black') +
-    geom_polygon(data = map_data.nrv %>% filter(year == "2014" & disciplineType == "SHORT-TER M SUSPENSION (OUT OF SCHOOL)"), aes(x=long, y=lat, group=group, fill = student_offenses_ratio), color = "black", size = .1) +
-    scale_fill_gradient(low = "white", high = "seagreen4") +
+    geom_polygon(data = map_data.nrv %>% filter(year == "2014" & disciplineType == "SHORT-TER M SUSPENSION (OUT OF SCHOOL)"), aes(x=long, y=lat, group=group, fill = student_offenses_ratio), color = "grey50", size = .1, alpha=.9) +
+        scale_fill_viridis(option="magma") +
+        guides(fill = guide_colorbar(barwidth = 2, barheight = 30)) +
     coord_equal() +
-    theme_map() +
-    labs(title="SHORT-TER M SUSPENSION (OUT OF SCHOOL) (NRV, 2014-2015)", x="", y="", fill = "Percent") +
-    geom_text(data = text.labels.df2, aes(label = id_short, x = Longitude, y = Latitude), size = 3)
-
+    coord_fixed(ratio=1.2,xlim=range(map_data.nrv$long)+c(-.05,.05),ylim=range(map_data.nrv$lat)+c(-.05,.05)) +
+        theme(legend.text = element_text(size=20), legend.title = element_text(size=25),
+              axis.text = element_blank(), axis.title = element_blank(), axis.ticks = element_blank(),
+              title = element_text(size=25)) +
+    labs(title=paste(str_to_title("SHORT-TERM SUSPENSION (OUT OF SCHOOL) "),"(NRV, 2014-2015)"), fill = "Percent") +
+    geom_label_repel(data = text.labels.df2, aes(label = id_short, x = Longitude, y = Latitude), size = 7)
+dev.off()
