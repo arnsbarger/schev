@@ -1,6 +1,6 @@
 # pulaski vis
 # 1/10/2017
-setwd("~/Google Drive/SCHEV (Peter Blake - Wendy Kang)")
+setwd("~/Google Drive/SDAL/SCHEV (Peter Blake - Wendy Kang)")
 
 sch_cw <- read.csv("Code/Maddie/pulaski/VDOE_long_format_merge-allVA.csv")
 NRV <- list("Pulaski County","Radford City","Montgomery County","Giles County","Floyd County") 
@@ -13,6 +13,7 @@ library(ggplot2)
 library(plyr)
 library(dplyr)
 library(gridExtra)
+library(ggrepel)
 # map themes
 library(tidycensus)
 library(tidyverse)
@@ -162,7 +163,9 @@ text.labels.df2 <- text.labels.df %>% filter(id %in% c("NARROWS HIGH", "GILES HI
 # save(text.labels.df2, file = "Code/Maddie/pulaski/text.labels2.RData")
 
 load("Code/Maddie/pulaski/text.labels2.RData")
+text.labels.df2$clean_names <- str_to_title(gsub(" HIGH","",text.labels.df2$id))
 library(ggmap)
+library(scales)
 al1 = get_map(location = c(lon = -80.44353, lat = 37.05961), zoom = 9, source = "google", color ="bw")
 al2 = get_map(location = c(lon = -80.44353, lat = 37.05961), zoom = 9, source = "google")
 
@@ -174,7 +177,7 @@ al2MAP = ggmap::ggmap(al2)
 pal <- rev(viridis_pal(alpha = 1, begin = 0, end = 1, direction = 1,
                        option = "A")(20))[c(1,3,6,8,10,13,15,17,20)] 
 
-show_col(pal)
+scales::show_col(pal)
 
 
 # boundary maps
@@ -211,10 +214,10 @@ al1MAP +
     geom_polygon(data = map_data.nrv, aes(x=long, y=lat, group=group, fill=sch_name_clean), color = "black", size = .1, alpha=.9) +
     geom_point(data = text.labels.df2, aes(x= long_hs, y = lat_hs), size = 4) +
     geom_point(data = text.labels.df2, aes(x= long_hs, y = lat_hs), size = 4, shape=1, color="white") +
-    #geom_label(data = text.labels.df2, aes(label = str_to_title(id), x = long_hs, y = lat_hs), vjust=-1, size = 5) +
+    geom_label_repel(data = text.labels.df2, aes(label = clean_names, x = long_hs, y = lat_hs), size = 8) +
     scale_fill_manual(values=pal, name="School") + 
     coord_fixed(ratio=1.2,xlim=range(map_data.nrv$long)+c(-.05,.05),ylim=range(map_data.nrv$lat)+c(-.05,.05)) +
-    theme(legend.text = element_text(size=15), legend.title = element_text(size=20), 
+    theme(legend.position = "none", 
           axis.text = element_blank(),
           axis.title = element_blank(),
           axis.ticks = element_blank())
@@ -263,6 +266,10 @@ male_dropout <- ggplot() +
 #     geom_text(data = text.labels.df2, aes(label = id_short, x = Longitude, y = Latitude), size = 3)
 
 text.labels.df2 <- text.labels.df %>% filter(id %in% c("NARROWS HIGH", "GILES HIGH", "PULASKI COUNTY SENIOR HIGH", "AUBURN HIGH","BLACKSBURG HIGH","CHRISTIANSBURG HIGH","EASTERN MONTGOMERY HIGH","RADFORD HIGH","FLOYD COUNTY HIGH"))
+giles_real <- text.labels.df2[8,2:3]
+narrows_real <- text.labels.df2[9,2:3]
+text.labels.df2[8,2:3] <- narrows_real
+text.labels.df2[9,2:3] <- giles_real
 # 
 # percent_grads_cont_ed <- ggplot() +
 #     geom_polygon(data = nrv_t.df, aes(x = long, y = lat, group = group), fill=NA,color='black') +
@@ -283,7 +290,7 @@ text.labels.df2 <- text.labels.df %>% filter(id %in% c("NARROWS HIGH", "GILES HI
 #     geom_text(data = text.labels.df2, aes(label = id_short, x = Longitude, y = Latitude), size = 3)
 
 # student_offenses_ratio <- ggplot() +
-library(ggrepel)
+
 # map_data$student_offenses_ratio <- map_data$numStudentOffenses / map_data$total_students_sch
 
 png("Code/Maddie/pulaski/vis/purple_NRV_disciplinary_map.png", 900, 900)
@@ -297,6 +304,42 @@ png("Code/Maddie/pulaski/vis/purple_NRV_disciplinary_map.png", 900, 900)
         theme(legend.text = element_text(size=20), legend.title = element_text(size=25),
               axis.text = element_blank(), axis.title = element_blank(), axis.ticks = element_blank(),
               title = element_text(size=25)) +
-    labs(title=paste(str_to_title("SHORT-TERM SUSPENSION (OUT OF SCHOOL) "),"(NRV, 2014-2015)"), fill = "Percent") +
+    labs(title=paste("Short term out-of-school suspension rates (NRV, 2014-2015)"), fill = "Rate", caption = "Rate = number of suspensions / number of students enrolled") +
     geom_label_repel(data = text.labels.df2, aes(label = id_short, x = Longitude, y = Latitude), size = 7)
 dev.off()
+
+pal <- rev(viridis_pal(alpha = 1, begin = 0, end = 1, direction = 1,
+                       option = "A")(20))[c(1,3,6,8,10,13,15,17,20)] 
+
+scales::show_col(pal)
+
+png("Code/Maddie/pulaski/vis/new_map.png", 900, 900)
+al1MAP +
+    # geom_polygon(data = nrv_t.df, aes(x = long, y = lat, group = group), fill=NA,color='black') +
+    geom_polygon(data = map_data.nrv, aes(x=long, y=lat, group=group, fill=sch_name_clean), color = "black", size = .1, alpha=.9) +
+    # geom_point(data = text.labels.df2, aes(x= long_hs, y = lat_hs), size = 4) +
+    # geom_point(data = text.labels.df2, aes(x= long_hs, y = lat_hs), size = 4, shape=1, color="white") +
+    geom_label_repel(data = text.labels.df2, aes(label = id_short, x = Longitude, y = Latitude), size = 7) +
+    scale_fill_manual(values=pal, name="School") + 
+    coord_fixed(ratio=1.2,xlim=range(map_data.nrv$long)+c(-.05,.05),ylim=range(map_data.nrv$lat)+c(-.05,.05)) +
+    theme(legend.position = "none", 
+          axis.text = element_blank(),
+          axis.title = element_blank(),
+          axis.ticks = element_blank())
+dev.off()
+
+png("Code/Maddie/pulaski/vis/new_map2.png", 900, 900)
+al1MAP +
+    # geom_polygon(data = nrv_t.df, aes(x = long, y = lat, group = group), fill=NA,color='black') +
+    geom_polygon(data = map_data.nrv, aes(x=long, y=lat, group=group, fill=sch_name_clean), color = "black", size = .1) +
+    # geom_point(data = text.labels.df2, aes(x= long_hs, y = lat_hs), size = 4) +
+    # geom_point(data = text.labels.df2, aes(x= long_hs, y = lat_hs), size = 4, shape=1, color="white") +
+    geom_label_repel(data = text.labels.df2, aes(label = id_short, x = Longitude, y = Latitude), size = 7) +
+    scale_fill_manual(values=pal, name="School") + 
+    coord_fixed(ratio=1.2,xlim=range(map_data.nrv$long)+c(-.05,.05),ylim=range(map_data.nrv$lat)+c(-.05,.05)) +
+    theme(legend.position = "none", 
+          axis.text = element_blank(),
+          axis.title = element_blank(),
+          axis.ticks = element_blank())
+dev.off()
+
