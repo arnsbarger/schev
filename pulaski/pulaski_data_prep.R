@@ -40,7 +40,11 @@ map_data1 <- merge(map_data, vdoe_diploma_and_posths_plans_all_schools, by.x = c
 
 # DROPOUTS
 map_data2 <- merge(map_data1, vdoe_ontimegrad_dropout_by_gender_allVA, by.x = c("div_name","sch_name_clean","year"), by.y = c("div_name","sch_name_clean","year_fall"), all.x = TRUE)
-write.csv(map_data2, "Code/Maddie/pulaski/VDOE_long_format_merge-allVA.csv")
+
+map_data3 <- merge(map_data2, vdoe_disciplinary_outcome_allVA, by.x = c("div_name","sch_name_clean","year"), by.y =  c("div_name","sch_name_clean","year_fall"))
+map_data3$disciplineType <- gsub("OUT-OF-SC HOOL","OUT OF SCHOOL", map_data3$disciplineType)
+
+write.csv(map_data3, "Code/Maddie/pulaski/VDOE_long_format_merge-allVA.csv")
 # dropouts <- cast(vdoe_ontimegrad_dropout_by_gender_allVA, div_name + sch_name_clean + year_fall ~ GENDER, value = "cohort_dropout_cnt")
 # dropouts$total_dropouts <- dropouts$`F` + dropouts$M
 # 

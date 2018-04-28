@@ -308,6 +308,23 @@ png("Code/Maddie/pulaski/vis/purple_NRV_disciplinary_map.png", 900, 900)
     geom_label_repel(data = text.labels.df2, aes(label = id_short, x = Longitude, y = Latitude), size = 7)
 dev.off()
 
+library(RColorBrewer)
+pal <- brewer.pal(9, "Greys")
+png("Code/Maddie/pulaski/vis/NRV_disciplinary_map-greyscale.png", 900, 900)
+al1MAP +
+    geom_polygon(data = nrv_t.df, aes(x = long, y = lat, group = group), fill=NA,color='black') +
+    geom_polygon(data = map_data.nrv %>% filter(year == "2014" & disciplineType == "SHORT-TER M SUSPENSION (OUT OF SCHOOL)"), aes(x=long, y=lat, group=group, fill = student_offenses_ratio), color = "grey50", size = .1, alpha=.9) +
+    scale_fill_gradient(low = "white", high = "black") +
+    guides(fill = guide_colorbar(barwidth = 2, barheight = 30)) +
+    coord_equal() +
+    coord_fixed(ratio=1.2,xlim=range(map_data.nrv$long)+c(-.05,.05),ylim=range(map_data.nrv$lat)+c(-.05,.05)) +
+    theme(legend.text = element_text(size=20), legend.title = element_text(size=25),
+          axis.text = element_blank(), axis.title = element_blank(), axis.ticks = element_blank(),
+          title = element_text(size=25)) +
+    labs(title=paste("Short term out-of-school suspension rates (NRV, 2014-2015)"), fill = "Rate", caption = "Rate = number of suspensions / number of students enrolled") +
+    geom_label_repel(data = text.labels.df2, aes(label = id_short, x = Longitude, y = Latitude), size = 7)
+dev.off()
+
 pal <- rev(viridis_pal(alpha = 1, begin = 0, end = 1, direction = 1,
                        option = "A")(20))[c(1,3,6,8,10,13,15,17,20)] 
 
@@ -343,3 +360,70 @@ al1MAP +
           axis.ticks = element_blank())
 dev.off()
 
+# black and white map
+library(RColorBrewer)
+pal <- brewer.pal(9, "Greys")
+png("Code/Maddie/pulaski/vis/NRV_greyscale.png", 900, 900)
+al1MAP +
+    # geom_polygon(data = nrv_t.df, aes(x = long, y = lat, group = group), fill=NA,color='black') +
+    geom_polygon(data = map_data.nrv, aes(x=long, y=lat, group=group, fill=sch_name_clean), color = "black", size = .1) +
+    # geom_point(data = text.labels.df2, aes(x= long_hs, y = lat_hs), size = 4) +
+    # geom_point(data = text.labels.df2, aes(x= long_hs, y = lat_hs), size = 4, shape=1, color="white") +
+    geom_label_repel(data = text.labels.df2, aes(label = id_short, x = Longitude, y = Latitude), size = 7) +
+    scale_fill_manual(values=pal, name="School") + 
+    coord_fixed(ratio=1.2,xlim=range(map_data.nrv$long)+c(-.05,.05),ylim=range(map_data.nrv$lat)+c(-.05,.05)) +
+    theme(legend.position = "none", 
+          axis.text = element_blank(),
+          axis.title = element_blank(),
+          axis.ticks = element_blank())
+dev.off()
+
+# can't see Radford...
+
+brewer.pal(9, "Greys")
+pal <- c("#FFFFFF", "#F0F0F0", "#D9D9D9","#000000","#969696", "#737373", "#525252", "#252525", "#BDBDBD")
+
+png("Code/Maddie/pulaski/vis/NRV_greyscale2.png", 900, 900)
+al1MAP +
+    # geom_polygon(data = nrv_t.df, aes(x = long, y = lat, group = group), fill=NA,color='black') +
+    geom_polygon(data = map_data.nrv, aes(x=long, y=lat, group=group, fill=sch_name_clean), color = "black", size = .1) +
+    # geom_point(data = text.labels.df2, aes(x= long_hs, y = lat_hs), size = 4) +
+    # geom_point(data = text.labels.df2, aes(x= long_hs, y = lat_hs), size = 4, shape=1, color="white") +
+    geom_label_repel(data = text.labels.df2, aes(label = id_short, x = Longitude, y = Latitude), size = 7) +
+    scale_fill_manual(values=pal, name="School") + 
+    coord_fixed(ratio=1.2,xlim=range(map_data.nrv$long)+c(-.05,.05),ylim=range(map_data.nrv$lat)+c(-.05,.05)) +
+    theme(legend.position = "none", 
+          axis.text = element_blank(),
+          axis.title = element_blank(),
+          axis.ticks = element_blank())
+dev.off()
+
+png("Code/Maddie/pulaski/vis/NRV_white.png", 900, 900)
+al1MAP +
+    # geom_polygon(data = nrv_t.df, aes(x = long, y = lat, group = group), fill=NA,color='black') +
+    geom_polygon(data = map_data.nrv, aes(x=long, y=lat, group=group), color = "black",fill="white",alpha=.8, size = .1) +
+    # geom_point(data = text.labels.df2, aes(x= long_hs, y = lat_hs), size = 4) +
+    # geom_point(data = text.labels.df2, aes(x= long_hs, y = lat_hs), size = 4, shape=1, color="white") +
+    geom_label_repel(data = text.labels.df2, aes(label = id_short, x = Longitude, y = Latitude), size = 7) +
+    scale_fill_manual(values=pal, name="School") + 
+    coord_fixed(ratio=1.2,xlim=range(map_data.nrv$long)+c(-.05,.05),ylim=range(map_data.nrv$lat)+c(-.05,.05)) +
+    theme(legend.position = "none", 
+          axis.text = element_blank(),
+          axis.title = element_blank(),
+          axis.ticks = element_blank())
+dev.off()
+
+png("Code/Maddie/pulaski/vis/NRV_black.png", 900, 900)
+al1MAP +
+    # geom_polygon(data = nrv_t.df, aes(x = long, y = lat, group = group), fill=NA,color='black') +
+    geom_polygon(data = map_data.nrv, aes(x=long, y=lat, group=group), color = "black",fill="black",alpha=.7, size = .1) +
+    # geom_point(data = text.labels.df2, aes(x= long_hs, y = lat_hs), size = 4) +
+    # geom_point(data = text.labels.df2, aes(x= long_hs, y = lat_hs), size = 4, shape=1, color="white") +
+    geom_label_repel(data = text.labels.df2, aes(label = id_short, x = Longitude, y = Latitude), size = 7) +
+    scale_fill_manual(values=pal, name="School") + 
+    coord_fixed(ratio=1.2,xlim=range(map_data.nrv$long)+c(-.05,.05),ylim=range(map_data.nrv$lat)+c(-.05,.05)) +
+    theme(legend.position = "none", 
+          axis.text = element_blank(),
+          axis.title = element_blank(),
+          axis.ticks = element_blank())
+dev.off()

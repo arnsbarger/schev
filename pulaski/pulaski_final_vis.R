@@ -86,15 +86,16 @@ show_col(pal)
 grad_outcomes$sch_name_clean2 <- gsub(" High", "",grad_outcomes$sch_name_clean)
 grad_outcomes$sch_name_clean2 <- factor(grad_outcomes$sch_name_clean2, levels = c('Pulaski County Senior','Floyd County','Giles','Narrows','Auburn','Blacksburg','Christiansburg','Eastern Montgomery','Radford'))
 
-#pdf("Code/Maddie/pulaski/vis/cohort_outcomes_class2014.pdf", height = 9, width = 12)
+pdf("Code/Maddie/pulaski/vis/cohort_outcomes_class2014.pdf", height = 9, width = 12)
 #png("Code/Maddie/pulaski/vis/cohort_outcomes_class2014.png", height = 900, width = 1200)
-png("~/Desktop/cohort_outcomes_class2014.png")
+#png("~/Desktop/cohort_outcomes_class2014.png", height = 900, width = 1200)
+#pdf("~/Desktop/cohort_outcomes_class2014.pdf",height = 9, width = 12)
 ggplot(data=grad_outcomes %>% filter(year==2014), aes(x=sch_name_clean2, y=percent, fill=factor(variable))) +
     geom_bar(colour="grey50", stat="identity") +
     scale_fill_manual(values=pal,
                        name="Cohort Outcome",
                        labels=c("Attending 2-year institution", "Attending 4-year institution", "Other continuing education", "Employment","Military","No plans")) +
-    labs(title = "Cohort outcomes by school (Class of 2014)",x="School",y="Proportion") +
+    labs(title = "Cohort outcomes by high school (Class of 2014)",x="School",y="Proportion") +
     theme_bw() +
     theme(axis.text.x = element_text(size=15, angle=90,hjust=0.95,vjust=0.2),
           axis.text.y = element_text(size=15),
@@ -102,6 +103,27 @@ ggplot(data=grad_outcomes %>% filter(year==2014), aes(x=sch_name_clean2, y=perce
           title = element_text(size=20),
           legend.text = element_text(size=15))
 dev.off()
-    
 
-    
+pal <- rev(viridis_pal(alpha = 1, begin = 0, end = 1, direction = 1,
+                       option = "A")(5))#[c(1,5,7,10,14,20)] 
+
+show_col(pal)
+diploma_type$sch_name_clean2 <- gsub(" High", "",diploma_type$sch_name_clean)
+diploma_type$sch_name_clean2 <- factor(diploma_type$sch_name_clean2, levels = c('Pulaski County Senior','Floyd County','Giles','Narrows','Auburn','Blacksburg','Christiansburg','Eastern Montgomery','Radford'))
+
+diploma_type$percent_diploma_type <- diploma_type$value / diploma_type$total_grads
+
+pdf("Code/Maddie/pulaski/vis/diploma_type_class2014.pdf", height = 9, width = 12)
+ggplot(data=diploma_type %>% filter(year==2014), aes(x=sch_name_clean2, y=percent_diploma_type, fill=factor(variable))) +
+    geom_bar(colour="grey50", stat="identity") +
+    scale_fill_manual(values=pal,
+                      name="Degree Type",
+                      labels=c("Standard diploma", "Advanced studies diploma", "Other diploma", "Certificate of program completion","GED certificate")) +
+    labs(title = "Diploma types by high school (Class of 2014)",x="School",y="Proportion") +
+    theme_bw() +
+    theme(axis.text.x = element_text(size=15, angle=90,hjust=0.95,vjust=0.2),
+          axis.text.y = element_text(size=15),
+          axis.title = element_text(size=20),
+          title = element_text(size=20),
+          legend.text = element_text(size=15))
+dev.off()
