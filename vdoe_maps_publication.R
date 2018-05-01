@@ -8,6 +8,9 @@ library(tmaptools)
 library(sp)
 library(ggplot2)
 library(plyr)
+library(viridis)
+library(scales)
+library(ggplot2)
 
 setwd("~/Google Drive/SDAL/SCHEV (Peter Blake - Wendy Kang)/")
 
@@ -57,11 +60,8 @@ vdoe <- read.csv("Code/Bianica/vdoe_psEnrollmentDataForMaps.csv")
 
 map_data <- left_join(x=vdoe, y=sch_boundaries.df, by = "sch_name_clean")
 
-## VIRGINIA MAPS ------
-pal <- rev(viridis_pal(alpha = 1, begin = 0, end = 1, direction = 1,
-                       option = "A")(5))#[c(1,5,7,10,14,20)] 
 
-show_col(pal)
+## VIRGINIA MAPS ------
 
 # two year
 ggplot() + 
