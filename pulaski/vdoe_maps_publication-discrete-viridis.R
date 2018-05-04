@@ -299,7 +299,7 @@ viridis_mapVA(variable = data1$totalProp_4YearCollegeEnrollment,
               file_path = "Code/Maddie/output/publication_maps/map_prop_4year.pdf", 
               legend_position = c(0.27, 0.86),
               rev(magma(n)),
-              minVal = 0.03, maxVal = 0.55)
+              minVal = 0, maxVal = 0.55)
 
 # two year disadvantaged
 # viridis_mapVA(variable = data1$disadvY_2_year_ps_prop, 
@@ -387,8 +387,8 @@ viridis_map(variable = data1$totalProp_4YearCollegeEnrollment,
             file_path = "Code/Maddie/output/publication_maps/APPALACHIAmap_prop_4year.pdf", 
             legend_position = c(0.3, 0.85),
             label_data = appalachia.labels,
-            rev(magma(n)),
-            minVal = 0.03, maxVal = 0.55)
+            rev(viridis(n)),
+            minVal = 0, maxVal = 0.55)
 
 # disadvantaged two year
 # viridis_map(variable = data1$disadvY_2_year_ps_prop, 
@@ -432,8 +432,8 @@ viridis_mapZOOM(variable = data1$totalProp_4YearCollegeEnrollment,
                 file_path = "Code/Maddie/output/publication_maps/ROANOKE-ZOOMmap_prop_4year.pdf", 
                 legend_position = c(0.83, 0.1),
                 label_data = appalachia.labels %>% filter(county_name %in% roanoke_county),
-                rev(magma(n)),
-                minVal = 0.03, maxVal = 0.55)
+                rev(viridis(n)),
+                minVal = 0, maxVal = 0.55)
 
 # two year disadvantaged
 # viridis_mapZOOM(variable = data1$disadvY_2_year_ps_prop, 
@@ -470,17 +470,17 @@ viridis_map(variable = data1$totalProp_2YearCollegeEnrollment,
             file_path = "Code/Maddie/output/publication_maps/EASTERNmap_prop_2year.pdf", 
             legend_position = c(0.19, 0.14),
             label_data = eastern.labels,
-            values = rev(viridis(n)),
-            minVal = 0.2, maxVal = 0.31)
+            values = rev(magma(n)),
+            minVal = 0.2, maxVal = 0.65)
 
 # four year
 viridis_map(variable = data1$totalProp_4YearCollegeEnrollment, 
             title = "Proportion of students enrolling \n in 4-year colleges", 
             file_path = "Code/Maddie/output/publication_maps/EASTERNmap_prop_4year.pdf", 
             legend_position = c(0.19, 0.14),
-            label_data = east.nonrichmond.labels,
-            rev(magma(n)),
-            minVal = 0.03, maxVal = 0.55)
+            label_data = eastern.labels,
+            rev(viridis(n)),
+            minVal = 0, maxVal = 0.55)
 
 # # disadvantaged two year
 # viridis_map(variable = data1$disadvY_2_year_ps_prop, 
@@ -516,8 +516,8 @@ viridis_mapZOOM(variable = data1$totalProp_2YearCollegeEnrollment,
                 file_path = "Code/Maddie/output/publication_maps/RICHMOND-ZOOMmap_prop_2year.pdf", 
                 legend_position = c(0.20, 0.14),
                 label_data = richmond.labels %>% filter(county_name %in% richmond_city),
-                values = rev(viridis(n)),
-                minVal = 0.2, maxVal = 0.31)
+                values = rev(magma(n)),
+                minVal = 0.2, maxVal = 0.65)
 
 # four year
 viridis_mapZOOM(variable = data1$totalProp_4YearCollegeEnrollment, 
@@ -526,8 +526,8 @@ viridis_mapZOOM(variable = data1$totalProp_4YearCollegeEnrollment,
                 #legend_position = c(0.22, 0.14),
                 legend_position = c(0.20, 0.14),
                 label_data = richmond.labels %>% filter(county_name %in% richmond_city),
-                rev(magma(n)),
-                minVal = 0.03, maxVal = 0.55)
+                rev(viridis(n)),
+                minVal = 0, maxVal = 0.55)
 
 # # disadvantaged two year
 # viridis_mapZOOM(variable = data1$disadvY_2_year_ps_prop, 
